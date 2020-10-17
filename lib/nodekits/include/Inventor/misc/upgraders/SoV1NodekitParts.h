@@ -75,7 +75,7 @@ class SoPath;
 //    Class: SoV1NodekitParts
 ////////////////////////////////////////////////////////////////////
 SoEXTENDER
-class SoV1NodekitParts {
+class INVENTOR_API SoV1NodekitParts {
 
     SoEXTENDER
   public:

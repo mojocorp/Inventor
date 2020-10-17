@@ -124,7 +124,7 @@ class SoPathList;
 /// \sa
 /// SoScaleUniformDragger,SoSpotLightDragger,SoTabBoxDragger,SoTabPlaneDragger,SoTrackballDragger,
 /// \sa SoTransformBoxDragger,SoTranslate1Dragger,SoTranslate2Dragger
-class SoInteractionKit : public SoBaseKit {
+class INVENTOR_API SoInteractionKit : public SoBaseKit {
 
     SO_KIT_HEADER(SoInteractionKit);
 

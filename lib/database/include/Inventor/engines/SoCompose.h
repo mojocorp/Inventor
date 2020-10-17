@@ -109,7 +109,7 @@
 /// }
 /// \endcode
 /// \sa SoDecomposeVec2f, SoEngineOutput
-class SoComposeVec2f : public SoEngine {
+class INVENTOR_API SoComposeVec2f : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeVec2f);
     SoMFFloat      x;      ///< Input
     SoMFFloat      y;      ///< Input
@@ -135,7 +135,7 @@ class SoComposeVec2f : public SoEngine {
 /// }
 /// \endcode
 /// \sa SoDecomposeVec2f, SoEngineOutput
-class SoComposeVec3f : public SoEngine {
+class INVENTOR_API SoComposeVec3f : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeVec3f);
     SoMFFloat      x;      ///< Input
     SoMFFloat      y;      ///< Input
@@ -164,7 +164,7 @@ class SoComposeVec3f : public SoEngine {
 /// }
 /// \endcode
 /// \sa SoDecomposeVec4f, SoEngineOutput
-class SoComposeVec4f : public SoEngine {
+class INVENTOR_API SoComposeVec4f : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeVec4f);
     SoMFFloat      x;      ///< Input
     SoMFFloat      y;      ///< Input
@@ -189,7 +189,7 @@ class SoComposeVec4f : public SoEngine {
 /// }
 /// \endcode
 /// \sa SoComposeVec2f, SoEngineOutput
-class SoDecomposeVec2f : public SoEngine {
+class INVENTOR_API SoDecomposeVec2f : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeVec2f);
     SoMFVec2f      vector; //< Input
     SoEngineOutput x;      //< Output (SoMFFloat)
@@ -212,7 +212,7 @@ class SoDecomposeVec2f : public SoEngine {
 /// }
 /// \endcode
 /// \sa SoComposeVec3f, SoEngineOutput
-class SoDecomposeVec3f : public SoEngine {
+class INVENTOR_API SoDecomposeVec3f : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeVec3f);
     SoMFVec3f      vector; //< Input
     SoEngineOutput x;      //< Output (SoMFFloat)
@@ -236,7 +236,7 @@ class SoDecomposeVec3f : public SoEngine {
 /// }
 /// \endcode
 /// \sa SoComposeVec4f, SoEngineOutput
-class SoDecomposeVec4f : public SoEngine {
+class INVENTOR_API SoDecomposeVec4f : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeVec4f);
     SoMFVec4f      vector; //< Input
     SoEngineOutput x;      //< Output (SoMFFloat)
@@ -265,7 +265,7 @@ class SoDecomposeVec4f : public SoEngine {
 /// }
 /// \endcode
 /// \sa SoComposeRotationFromTo, SoDecomposeRotation, SoEngineOutput
-class SoComposeRotation : public SoEngine {
+class INVENTOR_API SoComposeRotation : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeRotation);
     SoMFVec3f      axis;     // Input
     SoMFFloat      angle;    // Input
@@ -293,7 +293,7 @@ class SoComposeRotation : public SoEngine {
 /// }
 /// \endcode
 /// \sa SoComposeRotation, SoDecomposeRotationFromTo, SoEngineOutput
-class SoComposeRotationFromTo : public SoEngine {
+class INVENTOR_API SoComposeRotationFromTo : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeRotationFromTo);
     SoMFVec3f      from;     // Input
     SoMFVec3f      to;       // Input
@@ -316,7 +316,7 @@ class SoComposeRotationFromTo : public SoEngine {
 /// }
 /// \endcode
 /// \sa SoDecomposeRotationFromTo, SoComposeRotation, SoEngineOutput
-class SoDecomposeRotation : public SoEngine {
+class INVENTOR_API SoDecomposeRotation : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeRotation);
     SoMFRotation   rotation; // Input
     SoEngineOutput axis;     // Output (SoMFVec3f)
@@ -348,7 +348,7 @@ class SoDecomposeRotation : public SoEngine {
 /// }
 /// \endcode
 /// \sa SoDecomposeMatrix, SoEngineOutput
-class SoComposeMatrix : public SoEngine {
+class INVENTOR_API SoComposeMatrix : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeMatrix);
     SoMFVec3f      translation;      // Input
     SoMFRotation   rotation;         // Input
@@ -382,7 +382,7 @@ class SoComposeMatrix : public SoEngine {
 /// }
 /// \endcode
 /// \sa SoComposeMatrix, SoEngineOutput
-class SoDecomposeMatrix : public SoEngine {
+class INVENTOR_API SoDecomposeMatrix : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeMatrix);
     SoMFMatrix     matrix;           // Input
     SoMFVec3f      center;           // Input

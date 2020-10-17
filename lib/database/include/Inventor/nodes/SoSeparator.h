@@ -101,7 +101,7 @@ class SoGLCacheList;
 /// }
 /// \endcode
 /// \sa SoSelection, SoTransformSeparator
-class SoSeparator : public SoGroup {
+class INVENTOR_API SoSeparator : public SoGroup {
 
     SO_NODE_HEADER(SoSeparator);
 

@@ -65,7 +65,7 @@
 /// <tt>SoMemoryError</tt>  is used for errors reported
 /// due to lack of memory.
 /// \sa SoDebugError,SoReadError
-class SoMemoryError : public SoError {
+class INVENTOR_API SoMemoryError : public SoError {
 
   public:
     /// Sets handler callback for SoMemoryError class

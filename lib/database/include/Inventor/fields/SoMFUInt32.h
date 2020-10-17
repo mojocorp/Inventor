@@ -70,7 +70,7 @@
 /// example:
 ///
 /// [ 17, 0xFFFFE0, 0755 ]
-class SoMFUInt32 : public SoMField {
+class INVENTOR_API SoMFUInt32 : public SoMField {
 
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFUInt32, uint32_t, uint32_t);

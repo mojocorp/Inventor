@@ -72,7 +72,7 @@
 /// example:
 ///
 /// [ 1 0 0 0, .707 .707 0 100, ]
-class SoMFPlane : public SoMField {
+class INVENTOR_API SoMFPlane : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFPlane, SbPlane, SbPlane);
 

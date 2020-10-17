@@ -69,7 +69,7 @@
 /// Represents a directed line in 3D. This is a basic Inventor datatype that is
 /// used for representing a 3D line. It is used as input and output by a variety
 /// of Inventor classes. \sa SbVec3f, SbPlane
-class SbLine {
+class INVENTOR_API SbLine {
   public:
     SbLine() {}
 

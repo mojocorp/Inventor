@@ -75,7 +75,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoFieldConverter : public SoEngine {
+class INVENTOR_API SoFieldConverter : public SoEngine {
 
     SO_ENGINE_ABSTRACT_HEADER(SoFieldConverter);
 

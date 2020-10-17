@@ -79,7 +79,7 @@
 ////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoV1PointLightKit : public SoV1LightKit {
+class INVENTOR_API SoV1PointLightKit : public SoV1LightKit {
 
     // Define typeId and name stuff
     SO_NODE_HEADER(SoV1PointLightKit);

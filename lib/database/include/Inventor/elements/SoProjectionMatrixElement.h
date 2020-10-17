@@ -70,7 +70,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoProjectionMatrixElement : public SoReplacedElement {
+class INVENTOR_API SoProjectionMatrixElement : public SoReplacedElement {
 
     SO_ELEMENT_HEADER(SoProjectionMatrixElement);
 

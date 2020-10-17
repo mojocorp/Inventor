@@ -67,7 +67,7 @@
 /// SoConeDetail,SoCubeDetail,SoCylinderDetail,SoDetailList,SoFaceDetail,SoLineDetail,
 /// \sa
 /// SoNodeKitDetail,SoPickedPoint,SoPointDetail,SoPrimitiveVertex,SoTextDetail
-class SoDetail {
+class INVENTOR_API SoDetail {
   public:
     /// Destructor
     virtual ~SoDetail();

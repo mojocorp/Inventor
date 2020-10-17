@@ -66,7 +66,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoPickStyleElement : public SoInt32Element {
+class INVENTOR_API SoPickStyleElement : public SoInt32Element {
 
     SO_ELEMENT_HEADER(SoPickStyleElement);
 

@@ -77,7 +77,7 @@ class SoNode;
 ///
 /// is an SoSFNode field that points to a node named 'topSeparator' that was
 /// DEF'ed earlier in the scene. \sa SoField, SoSField, SoMFNode, SoNode
-class SoSFNode : public SoSField {
+class INVENTOR_API SoSFNode : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFNode, SoNode *, SoNode *);

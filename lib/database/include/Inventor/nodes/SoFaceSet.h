@@ -144,7 +144,7 @@ class SoState;
 /// }
 /// \endcode
 /// \sa SoCoordinate3,SoDrawStyle,SoIndexedFaceSet,SoFaceDetail,SoVertexProperty
-class SoFaceSet : public SoNonIndexedShape {
+class INVENTOR_API SoFaceSet : public SoNonIndexedShape {
 
     SO_NODE_HEADER(SoFaceSet);
 

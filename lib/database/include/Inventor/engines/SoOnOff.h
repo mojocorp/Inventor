@@ -79,7 +79,7 @@
 /// }
 /// \endcode
 /// \sa SoEngineOutput
-class SoOnOff : public SoEngine {
+class INVENTOR_API SoOnOff : public SoEngine {
 
     SO_ENGINE_HEADER(SoOnOff);
 

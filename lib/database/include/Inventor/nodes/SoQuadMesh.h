@@ -125,7 +125,7 @@
 /// \endcode
 /// \sa
 /// SoCoordinate3,SoDrawStyle,SoFaceDetail,SoFaceSet,SoTriangleStripSet,SoVertexProperty
-class SoQuadMesh : public SoNonIndexedShape {
+class INVENTOR_API SoQuadMesh : public SoNonIndexedShape {
 
     SO_NODE_HEADER(SoQuadMesh);
 

@@ -98,7 +98,7 @@
 /// undefined).
 /// \sa SoTimerQueueSensor, SoDataSensor, SoFieldSensor,
 /// SoIdleSensor,SoOneShotSensor, SoNodeSensor, SoPathSensor, SoSensorManager
-class SoDelayQueueSensor : public SoSensor {
+class INVENTOR_API SoDelayQueueSensor : public SoSensor {
 
   public:
     /// Constructor.

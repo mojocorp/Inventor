@@ -54,7 +54,7 @@
 #include <Inventor/SbVec.h>
 #include <Inventor/elements/SoSubElement.h>
 
-class SoDepthBufferElement : public SoElement {
+class INVENTOR_API SoDepthBufferElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoDepthBufferElement);
 

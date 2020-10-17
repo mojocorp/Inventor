@@ -80,7 +80,7 @@
 ///
 /// When more than one value is present, all of the values are enclosed in
 /// square brackets and separated by commas.
-class SoMFBitMask : public SoMFEnum {
+class INVENTOR_API SoMFBitMask : public SoMFEnum {
     // Use standard field stuff for derived class;
     // the rest is inherited from SoMFEnum
     SO_MFIELD_DERIVED_HEADER(SoMFBitMask, int, int);

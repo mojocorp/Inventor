@@ -78,7 +78,7 @@
 /// SbCylinderSheetProjector, \sa SbLineProjector, SbPlaneProjector,
 /// SbSpherePlaneProjector,SbSphereProjector, SbSphereSectionProjector,
 /// SbSphereSheetProjector
-class SbProjector {
+class INVENTOR_API SbProjector {
   public:
     /// Apply the projector using the given point, returning the
     /// point in three dimensions that it projects to.

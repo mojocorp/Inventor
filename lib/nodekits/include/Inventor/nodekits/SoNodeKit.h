@@ -64,7 +64,7 @@
 /// SoAppearanceKit,SoBaseKit,SoCameraKit,SoInteraction,SoLightKit,SoNodeKitDetail,SoNodeKitListPart,
 /// \sa
 /// SoNodeKitPath,SoNodekitCatalog,SoSceneKit,SoSeparatorKit,SoShapeKit,SoWrapperKit,SoXt
-class SoNodeKit {
+class INVENTOR_API SoNodeKit {
   public:
     /// Initialize all nodekit classes by registering
     /// them with the database.  This function needs to be called before \e any

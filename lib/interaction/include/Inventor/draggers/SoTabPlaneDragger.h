@@ -198,7 +198,7 @@ class SoFieldSensor;
 /// \sa
 /// SoSpotLightDragger,SoTabBoxDragger,SoTrackballDragger,SoTransformBoxDragger,
 /// \sa SoTransformerDragger,SoTranslate1Dragger,SoTranslate2Dragger
-class SoTabPlaneDragger : public SoDragger {
+class INVENTOR_API SoTabPlaneDragger : public SoDragger {
     // Define typeId and name stuff
     SO_KIT_HEADER(SoTabPlaneDragger);
 

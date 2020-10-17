@@ -76,7 +76,7 @@ typedef void SoGLRenderPassCB(void *userData);
 /// and initialized for proper OpenGL rendering. The <tt>SoXtRenderArea</tt>
 /// class or any of its subclasses may be used to create such a window.
 /// \sa SoSeparator, SoXtRenderArea
-class SoGLRenderAction : public SoAction {
+class INVENTOR_API SoGLRenderAction : public SoAction {
 
     SO_ACTION_HEADER(SoGLRenderAction);
 

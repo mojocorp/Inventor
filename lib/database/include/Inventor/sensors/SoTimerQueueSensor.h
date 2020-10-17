@@ -74,7 +74,7 @@
 /// current time are triggered once, in order from earliest to latest.
 /// \sa SoTimerSensor, SoAlarmSensor, SoIdleSensor, SoOneShotSensor,
 /// SoDataSensor
-class SoTimerQueueSensor : public SoSensor {
+class INVENTOR_API SoTimerQueueSensor : public SoSensor {
 
   public:
     /// Constructor.

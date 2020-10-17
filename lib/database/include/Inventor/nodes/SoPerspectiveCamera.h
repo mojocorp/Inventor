@@ -89,7 +89,7 @@
 /// }
 /// \endcode
 /// \sa SbViewVolume, SoOrthographicCamera
-class SoPerspectiveCamera : public SoCamera {
+class INVENTOR_API SoPerspectiveCamera : public SoCamera {
 
     SO_NODE_HEADER(SoPerspectiveCamera);
 

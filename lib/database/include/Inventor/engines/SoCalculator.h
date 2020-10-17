@@ -205,7 +205,7 @@ class SoCalcParser;
 /// }
 /// \endcode
 /// \sa SoEngineOutput, SoBoolOperation
-class SoCalculator : public SoEngine {
+class INVENTOR_API SoCalculator : public SoEngine {
 
     SO_ENGINE_HEADER(SoCalculator);
 

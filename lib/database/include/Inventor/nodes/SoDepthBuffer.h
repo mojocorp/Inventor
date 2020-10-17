@@ -58,7 +58,7 @@
 #include <Inventor/fields/SoSFVec2f.h>
 #include <Inventor/elements/SoDepthBufferElement.h>
 
-class SoDepthBuffer : public SoNode {
+class INVENTOR_API SoDepthBuffer : public SoNode {
     SO_NODE_HEADER(SoDepthBuffer);
 
   public:

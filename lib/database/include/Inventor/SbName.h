@@ -75,7 +75,7 @@
 /// node names.
 /// \sa SbString
 
-class SbName {
+class INVENTOR_API SbName {
   public:
     /// Default constructor
     SbName();
@@ -134,32 +134,32 @@ class SbName {
     }
 
     /// Equality operator for SbName/char* comparison
-    friend bool operator==(const SbName &n, const char *s) {
+    friend INVENTOR_API bool operator==(const SbName &n, const char *s) {
         return (*n.entry) == s;
     }
 
     /// Equality operator for SbName/char* comparison
-    friend bool operator==(const char *s, const SbName &n) {
+    friend INVENTOR_API bool operator==(const char *s, const SbName &n) {
         return (*n.entry) == s;
     }
 
     /// Equality operator for SbName/SbName comparison
-    friend bool operator==(const SbName &n1, const SbName &n2) {
+    friend INVENTOR_API bool operator==(const SbName &n1, const SbName &n2) {
         return n1.entry == n2.entry;
     }
 
     /// Inequality operator for SbName/char* comparison
-    friend bool operator!=(const SbName &n, const char *s) {
+    friend INVENTOR_API bool operator!=(const SbName &n, const char *s) {
         return (*n.entry) != s;
     }
 
     /// Inequality operator for SbName/char* comparison
-    friend bool operator!=(const char *s, const SbName &n) {
+    friend INVENTOR_API bool operator!=(const char *s, const SbName &n) {
         return (*n.entry) != s;
     }
 
     /// Inequality operator for SbName/SbName comparison
-    friend bool operator!=(const SbName &n1, const SbName &n2) {
+    friend INVENTOR_API bool operator!=(const SbName &n1, const SbName &n2) {
         return n1.entry != n2.entry;
     }
 
@@ -168,4 +168,3 @@ class SbName {
 
     static std::set<std::string> entries;
 };
-

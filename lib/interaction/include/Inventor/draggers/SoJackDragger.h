@@ -210,7 +210,7 @@ class SoFieldSensor;
 /// SoScale2UniformDragger,SoScaleUniformDragger,SoSpotLightDragger,SoTabBoxDragger,
 /// \sa
 /// SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,SoTransformerDragger,SoTranslate1Dragger,SoTranslate2Dragger
-class SoJackDragger : public SoDragger {
+class INVENTOR_API SoJackDragger : public SoDragger {
     SO_KIT_HEADER(SoJackDragger);
 
     // For making the dragger surround what lies above it.

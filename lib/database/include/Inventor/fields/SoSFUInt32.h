@@ -65,7 +65,7 @@
 /// <tt>SoSFUInt32s</tt> are written to file as a single uint32_t (32-bit)
 /// integer in decimal, hexadecimal or octal format.
 /// \sa SoField, SoSField, SoMFUInt32
-class SoSFUInt32 : public SoSField {
+class INVENTOR_API SoSFUInt32 : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFUInt32, uint32_t, uint32_t);

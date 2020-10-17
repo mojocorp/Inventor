@@ -72,7 +72,7 @@ class SoNode;
 typedef void (*SoActionMethod)(SoAction *, SoNode *);
 
 SoINTERNAL
-class SoActionMethodList : public SbPList {
+class INVENTOR_API SoActionMethodList : public SbPList {
 
   public:
     /// Constructor.  Pass in list from parent action.

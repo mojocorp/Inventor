@@ -87,7 +87,7 @@
 /// \endcode
 /// \sa
 /// SoMatrixTransform,SoResetTransform,SoRotation,SoRotationXYZ,SoScale,SoTransformManip,SoTransformSeparator,SoTranslation
-class SoTransform : public SoTransformation {
+class INVENTOR_API SoTransform : public SoTransformation {
 
     SO_NODE_HEADER(SoTransform);
 

@@ -93,7 +93,7 @@ class SoSearchAction;
 /// nodekits and hides any private parts, successive nodekits in the path may
 /// not actually be parent and child. \sa SoBaseKit, SoPath, SoRayPickAction,
 /// SoSearchAction
-class SoNodeKitPath : public SoPath {
+class INVENTOR_API SoNodeKitPath : public SoPath {
 
   public:
     /// Returns length of path chain (number of nodekits).
@@ -139,7 +139,8 @@ class SoNodeKitPath : public SoPath {
 
     /// Returns TRUE if all node pointers in the two nodekit path chains are
     /// equal.
-    friend int operator==(const SoNodeKitPath &p1, const SoNodeKitPath &p2);
+    friend INVENTOR_API int operator==(const SoNodeKitPath &p1,
+                                       const SoNodeKitPath &p2);
 
   protected:
     // Hide the constructor
@@ -165,4 +166,3 @@ class SoNodeKitPath : public SoPath {
     void removeIndex(SoNode *parent, int oldIndex);
     void replaceIndex(SoNode *parent, int index, SoNode *newChild);
 };
-

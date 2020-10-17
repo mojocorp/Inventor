@@ -72,7 +72,7 @@ class SoNode;
 /// <tt>SoNode</tt>s.  It updates reference counts to nodes in the list
 /// whenever adding or removing pointers.
 /// \sa SoNode
-class SoNodeList : public SoBaseList {
+class INVENTOR_API SoNodeList : public SoBaseList {
   public:
     /// Constructor.
     SoNodeList() : SoBaseList() {}

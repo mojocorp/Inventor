@@ -72,7 +72,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoNormalElement : public SoReplacedElement {
+class INVENTOR_API SoNormalElement : public SoReplacedElement {
 
     SO_ELEMENT_HEADER(SoNormalElement);
 

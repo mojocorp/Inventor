@@ -81,7 +81,7 @@ class SoElement;
 class SoTypeList;
 
 SoEXTENDER
-class SoState {
+class INVENTOR_API SoState {
 
   public:
     /// Constructor. Takes pointer to action instance this state is

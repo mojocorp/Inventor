@@ -88,7 +88,7 @@
 /// }
 /// \endcode
 /// \sa SoEngineOutput, SoConcatenate, SoGate
-class SoSelectOne : public SoEngine {
+class INVENTOR_API SoSelectOne : public SoEngine {
 
     SO_ENGINE_HEADER(SoSelectOne);
 

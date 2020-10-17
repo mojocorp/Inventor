@@ -85,7 +85,7 @@ class SoTypeList;
 /// element is added to the elements-used list of all currently
 /// open caches.
 SoEXTENDER
-class SoElement {
+class INVENTOR_API SoElement {
 
   public:
     /// Initializes element. Called for first element of its kind in

@@ -77,7 +77,7 @@ class SoPath;
 /// Abstract base class for Inventor node, path, and engine classes. This
 /// class handles reference counting, notification, and naming.
 /// \sa SoFieldContainer, SoNode, SoPath, SoEngine, SoDB
-class SoBase {
+class INVENTOR_API SoBase {
   public:
     /// Adds a reference to an instance. Instances should be
     /// referenced when they will be used outside of the routine in which they

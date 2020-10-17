@@ -84,7 +84,7 @@ typedef void SoSceneManagerRenderCB(void *userData, SoSceneManager *mgr);
 /// available for programmers not working with the <em>Inventor Xt Component and
 /// Utility Library</em>.
 /// \sa SoXtRenderArea, SoGLRenderAction, SoHandleEventAction
-class SoSceneManager {
+class INVENTOR_API SoSceneManager {
   public:
     /// Constructor.
     SoSceneManager();

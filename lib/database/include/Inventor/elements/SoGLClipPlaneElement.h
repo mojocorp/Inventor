@@ -71,7 +71,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoGLClipPlaneElement : public SoClipPlaneElement {
+class INVENTOR_API SoGLClipPlaneElement : public SoClipPlaneElement {
 
     SO_ELEMENT_HEADER(SoGLClipPlaneElement);
 

@@ -67,7 +67,7 @@
 /// exactly that time, but will be called sometime after the specified
 /// time.
 /// \sa SoOneShotSensor, SoTimerSensor, SoTimerQueueSensor, SbTime
-class SoAlarmSensor : public SoTimerQueueSensor {
+class INVENTOR_API SoAlarmSensor : public SoTimerQueueSensor {
 
   public:
     /// Constructor.

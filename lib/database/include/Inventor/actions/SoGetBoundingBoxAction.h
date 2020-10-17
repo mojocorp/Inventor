@@ -88,7 +88,7 @@
 /// If the subgraph being traversed does not contain any shapes, the returned
 /// bounding box will be empty (that is, box.isEmpty() will return TRUE).
 /// \sa SbBox3f, SbXfBox3f, SoGetMatrixAction
-class SoGetBoundingBoxAction : public SoAction {
+class INVENTOR_API SoGetBoundingBoxAction : public SoAction {
 
     SO_ACTION_HEADER(SoGetBoundingBoxAction);
 

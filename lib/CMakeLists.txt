@@ -1,8 +1,6 @@
 find_package(OpenGL REQUIRED)
 find_package(BISON REQUIRED)
 
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-
 if(UNIX AND NOT APPLE)
     find_package(X11 REQUIRED)
 endif()
@@ -16,6 +14,8 @@ if (APPLE)
     endif ()
     mark_as_advanced(COREGRAPHICS)
 endif ()
+
+add_definitions(-DINVENTOR_EXPORTS)
 
 if(APPLE)
     add_definitions(-DSB_OS_MACOS)

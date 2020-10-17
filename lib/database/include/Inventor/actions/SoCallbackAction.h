@@ -121,7 +121,7 @@ typedef void SoPointCB(void *userData, SoCallbackAction *action,
 /// functions that are invoked during traversal, so there is a valid state
 /// to work with.
 /// \sa SoCallback, SoEventCallback, SoShape
-class SoCallbackAction : public SoAction {
+class INVENTOR_API SoCallbackAction : public SoAction {
 
     SO_ACTION_HEADER(SoCallbackAction);
 

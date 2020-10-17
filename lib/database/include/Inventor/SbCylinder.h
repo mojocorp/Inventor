@@ -67,7 +67,7 @@
 /// This class defines a simple cylinder datatype.  It is used by
 /// the Inventor toolkit for arguments or return values.
 /// \sa SbVec3f, SbLine, SbPlane, SbSphere, SoCylinder
-class SbCylinder {
+class INVENTOR_API SbCylinder {
   public:
     /// Constructor
     SbCylinder();

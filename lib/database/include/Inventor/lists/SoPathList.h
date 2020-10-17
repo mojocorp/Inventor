@@ -72,7 +72,7 @@ class SoPath;
 /// <tt>SoPath</tt>s.  It updates reference counts to paths in the list
 /// whenever adding or removing pointers.
 /// \sa SoPath
-class SoPathList : public SoBaseList {
+class INVENTOR_API SoPathList : public SoBaseList {
   public:
     /// Constructor.
     SoPathList() : SoBaseList() {}

@@ -119,7 +119,7 @@ class SoOutput;
 /// command in the transcription area.  The <tt>SoTranReceiver</tt> class can
 /// be used at the other end to interpret the transcribed commands.
 /// \sa SoOutput, SoTranReceiver
-class SoTranSender {
+class INVENTOR_API SoTranSender {
   public:
     /// The constructor takes a pointer to an SoOutput instance that
     /// determines what the transcription area is (file or memory).
@@ -187,7 +187,7 @@ class SoTranSender {
 /// transcription. It interprets changes to a Inventor database packaged
 /// up by an <tt>SoTranSender</tt>.
 /// \sa SoInput, SoTranSender
-class SoTranReceiver {
+class INVENTOR_API SoTranReceiver {
 
   public:
     /// The constructor takes a pointer to an SoGroup instance that is the

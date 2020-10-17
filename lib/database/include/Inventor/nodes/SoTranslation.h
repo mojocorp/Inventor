@@ -75,7 +75,7 @@
 /// }
 /// \endcode
 /// \sa SoTransform
-class SoTranslation : public SoTransformation {
+class INVENTOR_API SoTranslation : public SoTransformation {
 
     SO_NODE_HEADER(SoTranslation);
 

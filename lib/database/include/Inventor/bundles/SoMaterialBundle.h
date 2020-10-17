@@ -73,7 +73,7 @@ class SoGLLazyElement;
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoMaterialBundle : public SoBundle {
+class INVENTOR_API SoMaterialBundle : public SoBundle {
 
   public:
     /// Constructor - takes the action the bundle is used for

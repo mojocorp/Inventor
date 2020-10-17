@@ -105,7 +105,7 @@ class SoBitmapFontCache;
 /// }
 /// \endcode
 /// \sa SoFont, SoText3, SoTextDetail
-class SoText2 : public SoShape {
+class INVENTOR_API SoText2 : public SoShape {
 
     SO_NODE_HEADER(SoText2);
 

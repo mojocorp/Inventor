@@ -73,7 +73,7 @@ typedef float SbMat[4][4];
 /// 4x4 matrix class/datatype used by many Inventor node and action classes.
 /// The matrices are stored in row-major order.
 /// \sa SbVec3f, SbRotation
-class SbMatrix {
+class INVENTOR_API SbMatrix {
   public:
     /// Default constructor
     SbMatrix() {}
@@ -234,13 +234,14 @@ class SbMatrix {
     SbMatrix &operator*=(const SbMatrix &m) { return multRight(m); }
 
     /// Binary multiplication of matrices
-    friend SbMatrix operator*(const SbMatrix &m1, const SbMatrix &m2);
+    friend INVENTOR_API SbMatrix operator*(const SbMatrix &m1,
+                                           const SbMatrix &m2);
 
     /// Equality comparison operator
-    friend int operator==(const SbMatrix &m1, const SbMatrix &m2);
+    friend INVENTOR_API int operator==(const SbMatrix &m1, const SbMatrix &m2);
 
     /// Inequality comparison operator
-    friend int operator!=(const SbMatrix &m1, const SbMatrix &m2) {
+    friend INVENTOR_API int operator!=(const SbMatrix &m1, const SbMatrix &m2) {
         return !(m1 == m2);
     }
 
@@ -255,4 +256,3 @@ class SbMatrix {
 
     SbBool affine_inverse(const SbMatrix &in, SbMatrix &out) const;
 };
-

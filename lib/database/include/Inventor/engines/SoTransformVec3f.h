@@ -86,7 +86,7 @@
 /// }
 /// \endcode
 /// \sa SoEngineOutput
-class SoTransformVec3f : public SoEngine {
+class INVENTOR_API SoTransformVec3f : public SoEngine {
 
     SO_ENGINE_HEADER(SoTransformVec3f);
 

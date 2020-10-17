@@ -86,7 +86,7 @@ struct SoEnumEntry;
 //////////////////////////////////////////////////////////////////////////////
 
 SoINTERNAL
-class SoFieldData {
+class INVENTOR_API SoFieldData {
   public:
     /// Constructor
     SoFieldData() {}

@@ -78,7 +78,7 @@ class SoMFString;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class SoUnknownNode : public SoGroup {
+class INVENTOR_API SoUnknownNode : public SoGroup {
 
     SO_NODE_HEADER(SoUnknownNode);
 
@@ -133,4 +133,3 @@ class SoUnknownNode : public SoGroup {
     // Will be true if read in with children
     SbBool hasChildren;
 };
-

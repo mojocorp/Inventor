@@ -74,7 +74,7 @@
 /// example:
 ///
 /// [ Fred, Wilma, _Part_01, translationField ]
-class SoMFName : public SoMField {
+class INVENTOR_API SoMFName : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFName, SbName, const SbName &);
 

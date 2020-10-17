@@ -75,7 +75,7 @@ class SoBase;
 /// removing pointers from the list updates reference counts in the
 /// corresponding instances.
 /// \sa SoBase, SoNodeList, SoPathList
-class SoBaseList : public SbPList {
+class INVENTOR_API SoBaseList : public SbPList {
   public:
     /// Constructor.
     SoBaseList();

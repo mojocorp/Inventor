@@ -84,7 +84,7 @@ class SbPlane;
 /// 3D vector class used to store 3D vectors and points. This class is used
 /// throughout Inventor for arguments and return values.
 /// \sa SbVec2f, SbVec4f, SbVec2s, SbRotation
-class SbVec3f {
+class INVENTOR_API SbVec3f {
   public:
     /// Default constructor
     SbVec3f() {}
@@ -171,26 +171,28 @@ class SbVec3f {
     SbVec3f operator-() const;
 
     /// Component-wise binary scalar multiplication operator
-    friend SbVec3f operator*(const SbVec3f &v, float d);
+    friend INVENTOR_API SbVec3f operator*(const SbVec3f &v, float d);
 
     /// Component-wise binary scalar multiplication operator
-    friend SbVec3f operator*(float d, const SbVec3f &v) { return v * d; }
+    friend INVENTOR_API SbVec3f operator*(float d, const SbVec3f &v) {
+        return v * d;
+    }
 
     /// Component-wise binary scalar division operator
-    friend SbVec3f operator/(const SbVec3f &v, float d) {
+    friend INVENTOR_API SbVec3f operator/(const SbVec3f &v, float d) {
         return v * (1.0f / d);
     }
 
     /// Component-wise binary vector addition operator
-    friend SbVec3f operator+(const SbVec3f &v1, const SbVec3f &v2);
+    friend INVENTOR_API SbVec3f operator+(const SbVec3f &v1, const SbVec3f &v2);
 
     /// Component-wise binary vector subtraction operator
-    friend SbVec3f operator-(const SbVec3f &v1, const SbVec3f &v2);
+    friend INVENTOR_API SbVec3f operator-(const SbVec3f &v1, const SbVec3f &v2);
 
     /// Equality comparison operator
-    friend int operator==(const SbVec3f &v1, const SbVec3f &v2);
+    friend INVENTOR_API int operator==(const SbVec3f &v1, const SbVec3f &v2);
     /// Inequality comparison operator
-    friend int operator!=(const SbVec3f &v1, const SbVec3f &v2) {
+    friend INVENTOR_API int operator!=(const SbVec3f &v1, const SbVec3f &v2) {
         return !(v1 == v2);
     }
 
@@ -211,7 +213,7 @@ class SbVec3f {
 /// 3D vector class used to store 3D vectors and points. This class is used
 /// throughout Inventor for arguments and return values.
 /// \sa SbVec2f, SbVec3f, SbVec4f, SbVec2s, SbRotation
-class SbVec3s {
+class INVENTOR_API SbVec3s {
   public:
     /// Default constructor
     SbVec3s() {}
@@ -288,27 +290,29 @@ class SbVec3s {
     SbVec3s operator-() const;
 
     /// Component-wise binary scalar multiplication operator
-    friend SbVec3s operator*(const SbVec3s &v, short d);
+    friend INVENTOR_API SbVec3s operator*(const SbVec3s &v, short d);
 
     /// Component-wise binary scalar multiplication operator
-    friend SbVec3s operator*(short d, const SbVec3s &v) { return v * d; }
+    friend INVENTOR_API SbVec3s operator*(short d, const SbVec3s &v) {
+        return v * d;
+    }
 
     /// Component-wise binary scalar division operator
-    friend SbVec3s operator/(const SbVec3s &v, short d) {
+    friend INVENTOR_API SbVec3s operator/(const SbVec3s &v, short d) {
         return SbVec3s(v[0] / d, v[1] / d, v[2] / d);
     }
 
     /// Component-wise binary vector addition operator
-    friend SbVec3s operator+(const SbVec3s &v1, const SbVec3s &v2);
+    friend INVENTOR_API SbVec3s operator+(const SbVec3s &v1, const SbVec3s &v2);
 
     /// Component-wise binary vector subtraction operator
-    friend SbVec3s operator-(const SbVec3s &v1, const SbVec3s &v2);
+    friend INVENTOR_API SbVec3s operator-(const SbVec3s &v1, const SbVec3s &v2);
 
     /// Equality comparison operator
-    friend int operator==(const SbVec3s &v1, const SbVec3s &v2);
+    friend INVENTOR_API int operator==(const SbVec3s &v1, const SbVec3s &v2);
 
     /// Inequality comparison operator
-    friend int operator!=(const SbVec3s &v1, const SbVec3s &v2) {
+    friend INVENTOR_API int operator!=(const SbVec3s &v1, const SbVec3s &v2) {
         return !(v1 == v2);
     }
 
@@ -321,7 +325,7 @@ class SbVec3s {
 /// 2D vector class used to store 2D vectors and points. This class is used
 /// throughout Inventor for arguments and return values.
 /// \sa SbVec3f, SbVec4f, SbVec2s, SbRotation
-class SbVec2f {
+class INVENTOR_API SbVec2f {
   public:
     /// Default constructor
     SbVec2f() {}
@@ -379,27 +383,29 @@ class SbVec2f {
     SbVec2f operator-() const;
 
     /// Component-wise binary scalar multiplication operator
-    friend SbVec2f operator*(const SbVec2f &v, float d);
+    friend INVENTOR_API SbVec2f operator*(const SbVec2f &v, float d);
 
     /// Component-wise binary scalar multiplication operator
-    friend SbVec2f operator*(float d, const SbVec2f &v) { return v * d; }
+    friend INVENTOR_API SbVec2f operator*(float d, const SbVec2f &v) {
+        return v * d;
+    }
 
     /// Component-wise binary scalar division operator
-    friend SbVec2f operator/(const SbVec2f &v, float d) {
+    friend INVENTOR_API SbVec2f operator/(const SbVec2f &v, float d) {
         return v * (1.0f / d);
     }
 
     /// Component-wise binary vector addition operator
-    friend SbVec2f operator+(const SbVec2f &v1, const SbVec2f &v2);
+    friend INVENTOR_API SbVec2f operator+(const SbVec2f &v1, const SbVec2f &v2);
 
     /// Component-wise binary vector subtraction operator
-    friend SbVec2f operator-(const SbVec2f &v1, const SbVec2f &v2);
+    friend INVENTOR_API SbVec2f operator-(const SbVec2f &v1, const SbVec2f &v2);
 
     /// Equality comparison operator
-    friend int operator==(const SbVec2f &v1, const SbVec2f &v2);
+    friend INVENTOR_API int operator==(const SbVec2f &v1, const SbVec2f &v2);
 
     /// Inequality comparison operator
-    friend int operator!=(const SbVec2f &v1, const SbVec2f &v2) {
+    friend INVENTOR_API int operator!=(const SbVec2f &v1, const SbVec2f &v2) {
         return !(v1 == v2);
     }
 
@@ -416,7 +422,7 @@ class SbVec2f {
 /// 2D vector class used to store 2D integer vectors and points. This class is
 /// used throughout Inventor for arguments and return values. \sa SbVec3f,
 /// SbVec4f, SbVec2f
-class SbVec2s {
+class INVENTOR_API SbVec2s {
   public:
     /// Default constructor
     SbVec2s() {}
@@ -473,36 +479,40 @@ class SbVec2s {
     SbVec2s operator-() const;
 
     /// Component-wise binary scalar multiplication operator
-    friend SbVec2s operator*(const SbVec2s &v, int d);
+    friend INVENTOR_API SbVec2s operator*(const SbVec2s &v, int d);
 
     /// Component-wise binary scalar multiplication operator
-    friend SbVec2s operator*(const SbVec2s &v, double d);
+    friend INVENTOR_API SbVec2s operator*(const SbVec2s &v, double d);
 
     /// Component-wise binary scalar multiplication operator
-    friend SbVec2s operator*(int d, const SbVec2s &v) { return v * d; }
+    friend INVENTOR_API SbVec2s operator*(int d, const SbVec2s &v) {
+        return v * d;
+    }
 
     /// Component-wise binary scalar multiplication operator
-    friend SbVec2s operator*(double d, const SbVec2s &v) { return v * d; }
+    friend INVENTOR_API SbVec2s operator*(double d, const SbVec2s &v) {
+        return v * d;
+    }
 
     /// Component-wise binary scalar division operator
-    friend SbVec2s operator/(const SbVec2s &v, int d);
+    friend INVENTOR_API SbVec2s operator/(const SbVec2s &v, int d);
 
     /// Component-wise binary scalar division operator
-    friend SbVec2s operator/(const SbVec2s &v, double d) {
+    friend INVENTOR_API SbVec2s operator/(const SbVec2s &v, double d) {
         return v * (1.0 / d);
     }
 
     /// Component-wise binary vector addition operator
-    friend SbVec2s operator+(const SbVec2s &v1, const SbVec2s &v2);
+    friend INVENTOR_API SbVec2s operator+(const SbVec2s &v1, const SbVec2s &v2);
 
     /// Component-wise binary vector subtraction operator
-    friend SbVec2s operator-(const SbVec2s &v1, const SbVec2s &v2);
+    friend INVENTOR_API SbVec2s operator-(const SbVec2s &v1, const SbVec2s &v2);
 
     /// Equality comparison operator
-    friend int operator==(const SbVec2s &v1, const SbVec2s &v2);
+    friend INVENTOR_API int operator==(const SbVec2s &v1, const SbVec2s &v2);
 
     /// Inequality comparison operator
-    friend int operator!=(const SbVec2s &v1, const SbVec2s &v2) {
+    friend INVENTOR_API int operator!=(const SbVec2s &v1, const SbVec2s &v2) {
         return !(v1 == v2);
     }
 
@@ -515,7 +525,7 @@ class SbVec2s {
 /// 4D vector class used to store homogeneous coordinates. This class is used
 /// in Inventor for arguments and return values.
 /// \sa SbVec2f, SbVec3f, SbVec2s, SbRotation
-class SbVec4f {
+class INVENTOR_API SbVec4f {
   public:
     /// Default constructor
     SbVec4f() {}
@@ -576,27 +586,29 @@ class SbVec4f {
     SbVec4f operator-() const;
 
     /// Component-wise binary scalar multiplication operator
-    friend SbVec4f operator*(const SbVec4f &v, float d);
+    friend INVENTOR_API SbVec4f operator*(const SbVec4f &v, float d);
 
     /// Component-wise binary scalar multiplication operator
-    friend SbVec4f operator*(float d, const SbVec4f &v) { return v * d; }
+    friend INVENTOR_API SbVec4f operator*(float d, const SbVec4f &v) {
+        return v * d;
+    }
 
     /// Component-wise binary scalar division operator
-    friend SbVec4f operator/(const SbVec4f &v, float d) {
+    friend INVENTOR_API SbVec4f operator/(const SbVec4f &v, float d) {
         return v * (1.0f / d);
     }
 
     /// Component-wise binary vector addition operator
-    friend SbVec4f operator+(const SbVec4f &v1, const SbVec4f &v2);
+    friend INVENTOR_API SbVec4f operator+(const SbVec4f &v1, const SbVec4f &v2);
 
     /// Component-wise binary vector subtraction operator
-    friend SbVec4f operator-(const SbVec4f &v1, const SbVec4f &v2);
+    friend INVENTOR_API SbVec4f operator-(const SbVec4f &v1, const SbVec4f &v2);
 
     /// Equality comparison operator
-    friend int operator==(const SbVec4f &v1, const SbVec4f &v2);
+    friend INVENTOR_API int operator==(const SbVec4f &v1, const SbVec4f &v2);
 
     /// Inequality comparison operator
-    friend int operator!=(const SbVec4f &v1, const SbVec4f &v2) {
+    friend INVENTOR_API int operator!=(const SbVec4f &v1, const SbVec4f &v2) {
         return !(v1 == v2);
     }
 
@@ -607,4 +619,3 @@ class SbVec4f {
   protected:
     float vec[4]; // Storage for vector components
 };
-

@@ -63,7 +63,7 @@
 /// This is an abstract base class for all picking actions. Currently,
 /// the only supported subclass is the <tt>SoRayPickAction</tt>.
 /// \sa SoRayPickAction
-class SoPickAction : public SoAction {
+class INVENTOR_API SoPickAction : public SoAction {
 
     SO_ACTION_HEADER(SoPickAction);
 

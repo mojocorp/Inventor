@@ -85,7 +85,7 @@ struct SoOutputEntry;
 //////////////////////////////////////////////////////////////////////////////
 
 SoINTERNAL
-class SoEngineOutputData {
+class INVENTOR_API SoEngineOutputData {
   public:
     /// Default constructor
     SoEngineOutputData() {}

@@ -71,7 +71,7 @@ class SoState;
 ////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoGLDisplayList {
+class INVENTOR_API SoGLDisplayList {
 
   public:
     //

@@ -68,7 +68,7 @@
 /// Methods on the <tt>SoOutput</tt> can be called to specify what file or
 /// memory buffer to write to.
 /// \sa SoOutput
-class SoWriteAction : public SoAction {
+class INVENTOR_API SoWriteAction : public SoAction {
 
     SO_ACTION_HEADER(SoWriteAction);
 

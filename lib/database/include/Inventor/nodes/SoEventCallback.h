@@ -90,7 +90,7 @@ typedef void SoEventCallbackCB(void *userData, SoEventCallback *node);
 /// }
 /// \endcode
 /// \sa SoInteraction, SoSelection, SoHandleEventAction, SoDragger
-class SoEventCallback : public SoNode {
+class INVENTOR_API SoEventCallback : public SoNode {
 
     SO_NODE_HEADER(SoEventCallback);
 

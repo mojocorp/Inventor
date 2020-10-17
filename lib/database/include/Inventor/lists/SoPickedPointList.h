@@ -72,7 +72,7 @@ class SoPickedPoint;
 /// instances of classes derived from <tt>SoPickedPoint</tt>. It is used
 /// primarily to return information from picking with the
 /// <tt>SoRayPickAction</tt> class. \sa SoPickedPoint, SoRayPickAction
-class SoPickedPointList : public SbPList {
+class INVENTOR_API SoPickedPointList : public SbPList {
   public:
     /// Constructor.
     SoPickedPointList() : SbPList() {}

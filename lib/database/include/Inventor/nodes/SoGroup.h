@@ -91,7 +91,7 @@ class SoChildList;
 /// }
 /// \endcode
 /// \sa SoArray,SoLevelOfDetail,SoMultipleCopy,SoPathSwitch,SoSeparator,SoSwitch
-class SoGroup : public SoNode {
+class INVENTOR_API SoGroup : public SoNode {
 
     SO_NODE_HEADER(SoGroup);
 

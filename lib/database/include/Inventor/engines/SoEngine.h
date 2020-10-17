@@ -96,7 +96,7 @@ class SoInput;
 /// SoDecomposeVec3f,SoDecomposeVec4f, SoElapsedTime, SoGate, \sa SoInterpolate,
 /// SoOnOff, SoOneShot, SoSelectOne,SoTimeCounter, SoTransformVec3f,
 /// SoTriggerAny
-class SoEngine : public SoFieldContainer {
+class INVENTOR_API SoEngine : public SoFieldContainer {
 
   public:
     /// Returns the type identifier for the SoEngine class.
@@ -212,7 +212,7 @@ class SoEngine : public SoFieldContainer {
 /// The application can at any time enable or disable the engine outputs.
 /// By default the engine outputs are enabled.
 /// \sa SoEngine
-class SoEngineOutput {
+class INVENTOR_API SoEngineOutput {
 
   public:
     /// Returns the type of field this output can connect to.

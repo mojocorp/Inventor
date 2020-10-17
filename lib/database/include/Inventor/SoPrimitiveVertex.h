@@ -73,7 +73,7 @@ class SoDetail;
 /// by shape classes while they are generating primitives. Anyone who
 /// wants to save them as return values from <tt>SoCallbackAction</tt> should
 /// probably make copies of them.
-class SoPrimitiveVertex {
+class INVENTOR_API SoPrimitiveVertex {
 
   public:
     /// Constructor.

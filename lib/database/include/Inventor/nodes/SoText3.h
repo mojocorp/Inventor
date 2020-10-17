@@ -122,7 +122,7 @@ class SoTextureCoordinateElement;
 /// }
 /// \endcode
 /// \sa SoFont,SoProfile,SoText2,SoTextDetail
-class SoText3 : public SoShape {
+class INVENTOR_API SoText3 : public SoShape {
 
     SO_NODE_HEADER(SoText3);
 

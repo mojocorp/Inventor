@@ -64,7 +64,7 @@ class SoAction;
 class SoCallbackAction;
 class SoGLRenderAction;
 
-class SoPolygonOffset : public SoNode {
+class INVENTOR_API SoPolygonOffset : public SoNode {
     SO_NODE_HEADER(SoPolygonOffset);
 
   public:

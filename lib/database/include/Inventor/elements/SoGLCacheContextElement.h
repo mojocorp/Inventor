@@ -99,7 +99,7 @@ class SoGLDisplayList;
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoGLCacheContextElement : public SoElement {
+class INVENTOR_API SoGLCacheContextElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoGLCacheContextElement);
 

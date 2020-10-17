@@ -76,7 +76,7 @@
 ///
 /// See the SoOneShotSensor manual page for more information.
 /// \sa SoOneShotSensor, SoDelayQueueSensor
-class SoIdleSensor : public SoDelayQueueSensor {
+class INVENTOR_API SoIdleSensor : public SoDelayQueueSensor {
 
   public:
     /// Constructor.

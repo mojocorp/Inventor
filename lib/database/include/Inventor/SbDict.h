@@ -74,7 +74,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoINTERNAL
-class SbDictEntry {
+class INVENTOR_API SbDictEntry {
   private:
     unsigned long key;
     void *        value;
@@ -100,7 +100,7 @@ class SbDictEntry {
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SbDict {
+class INVENTOR_API SbDict {
   public:
     /// Constructor
     SbDict(int entries = 251);

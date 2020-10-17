@@ -67,7 +67,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoV1NodeKit {
+class INVENTOR_API SoV1NodeKit {
   public:
     /// init all nodeKit classes
     static void init();

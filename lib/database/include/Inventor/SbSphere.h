@@ -71,7 +71,7 @@ class SbBox3f;
 /// is used for arguments or return values in the Inventor toolkit. See
 /// <tt>SoSphere</tt> for a database sphere (used for rendering, picking, etc.).
 /// \sa SbVec3f, SbLine, SoSphere
-class SbSphere {
+class INVENTOR_API SbSphere {
   public:
     /// Default constructor
     SbSphere() {}

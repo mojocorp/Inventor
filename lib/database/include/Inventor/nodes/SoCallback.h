@@ -115,7 +115,7 @@ typedef void SoCallbackCB(void *userData, SoAction *action);
 /// }
 /// \endcode
 /// \sa SoAction, SoCallbackAction, SoEventCallback
-class SoCallback : public SoNode {
+class INVENTOR_API SoCallback : public SoNode {
 
     SO_NODE_HEADER(SoCallback);
 

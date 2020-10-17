@@ -70,7 +70,7 @@
 /// [ 1.0, 2.3, 5, 6.2e4, -100, ]
 ///
 /// The last comma is optional.
-class SoMFFloat : public SoMField {
+class INVENTOR_API SoMFFloat : public SoMField {
 
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFFloat, float, float);

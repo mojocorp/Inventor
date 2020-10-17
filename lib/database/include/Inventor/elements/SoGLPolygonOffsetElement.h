@@ -70,7 +70,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoGLPolygonOffsetElement : public SoPolygonOffsetElement {
+class INVENTOR_API SoGLPolygonOffsetElement : public SoPolygonOffsetElement {
     SO_ELEMENT_HEADER(SoGLPolygonOffsetElement);
 
   public:

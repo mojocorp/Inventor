@@ -108,7 +108,7 @@
 /// }
 /// \endcode
 /// \sa SoIndexPointSet,SoCoordinate3,SoDrawStyle,SoPointDetail,SoVertexProperty
-class SoPointSet : public SoNonIndexedShape {
+class INVENTOR_API SoPointSet : public SoNonIndexedShape {
 
     SO_NODE_HEADER(SoPointSet);
 

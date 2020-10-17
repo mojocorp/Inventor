@@ -248,7 +248,7 @@ class SbPlaneProjector;
 /// \sa
 /// SoTabBoxDragger,SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,
 /// \sa SoTransformerDragger,SoTranslate1Dragger,SoTranslate2Dragger
-class SoSpotLightDragger : public SoDragger {
+class INVENTOR_API SoSpotLightDragger : public SoDragger {
     SO_KIT_HEADER(SoSpotLightDragger);
 
     // This gives the dragger an overall material.  It is edited by lightManips

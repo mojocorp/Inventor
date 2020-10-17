@@ -70,7 +70,7 @@
 /// \sa SbCylinderSheetProjector,SbLineProjector,
 /// SbSpherePlaneProjector,SbSphereProjector, SbSphereSectionProjector,
 /// SbSphereSheetProjector
-class SbPlaneProjector : public SbProjector {
+class INVENTOR_API SbPlaneProjector : public SbProjector {
   public:
     /// Constructor
     /// The default plane passes through the origin and is

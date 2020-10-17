@@ -79,7 +79,7 @@ class SoBaseKit;
 ////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoV1BaseKit : public SoV1CustomNode {
+class INVENTOR_API SoV1BaseKit : public SoV1CustomNode {
 
     //
     // DEFINE TYPEID AND NAME STUFF

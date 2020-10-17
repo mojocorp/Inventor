@@ -70,7 +70,7 @@ class SoTimerSensor;
 class SoAlarmSensor;
 
 SoINTERNAL
-class SoSensorManager {
+class INVENTOR_API SoSensorManager {
   public:
     /// Constructor
     SoSensorManager();

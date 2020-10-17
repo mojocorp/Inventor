@@ -67,7 +67,7 @@
 /// precede it with a backslash.  For example:
 ///
 /// [ cowEnizer , "Scene Boy" , "He said, \\"I did not!\\"" ]
-class SoMFString : public SoMField {
+class INVENTOR_API SoMFString : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFString, SbString, const SbString &);
 

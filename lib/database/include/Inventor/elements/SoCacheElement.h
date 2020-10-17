@@ -68,7 +68,7 @@ class SoCache;
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoCacheElement : public SoElement {
+class INVENTOR_API SoCacheElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoCacheElement);
 

@@ -73,7 +73,7 @@
 /// release events in the Inventor event model. \sa SoEvent, SoButtonEvent,
 /// SoKeyboardEvent, SoLocation2Event, SoMotion3Event,SoMouseButtonEvent, \sa
 /// SoHandleEventAction, SoEventCallback, SoSelection, SoInteraction,SoXtDevice
-class SoSpaceballButtonEvent : public SoButtonEvent {
+class INVENTOR_API SoSpaceballButtonEvent : public SoButtonEvent {
 
     SO_EVENT_HEADER();
 

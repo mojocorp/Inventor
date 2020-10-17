@@ -88,7 +88,7 @@
 /// itself to go off at time 3.0, not at time 3.9.  If the base time was
 /// never set, the sensor would be scheduled for time 3.9.
 /// \sa SoOneShotSensor, SoAlarmSensor, SoTimerQueueSensor, SbTime
-class SoTimerSensor : public SoTimerQueueSensor {
+class INVENTOR_API SoTimerSensor : public SoTimerQueueSensor {
 
   public:
     /// Constructor.

@@ -60,7 +60,7 @@
 
 class SoState;
 
-class SoTextureUnit : public SoNode {
+class INVENTOR_API SoTextureUnit : public SoNode {
 
     SO_NODE_HEADER(SoTextureUnit);
 

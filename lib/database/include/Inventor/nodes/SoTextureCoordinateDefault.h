@@ -79,7 +79,7 @@
 /// \endcode
 /// \sa
 /// SoTexture2,SoTexture2Transform,SoTextureCoordinateEnvironment,SoTextureCoordinatePlane
-class SoTextureCoordinateDefault : public SoTextureCoordinateFunction {
+class INVENTOR_API SoTextureCoordinateDefault : public SoTextureCoordinateFunction {
 
     SO_NODE_HEADER(SoTextureCoordinateDefault);
 

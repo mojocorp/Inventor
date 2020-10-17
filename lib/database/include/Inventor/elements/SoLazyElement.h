@@ -88,7 +88,7 @@ class SoColorPacker;
 #define SO_LAZY_NUM_COMPONENTS 9
 
 SoEXTENDER
-class SoLazyElement : public SoElement {
+class INVENTOR_API SoLazyElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoLazyElement);
 
@@ -369,7 +369,7 @@ class SoLazyElement : public SoElement {
 // color array.
 //////////////////////////////////////////////////////////////////////////
 
-class SoColorPacker {
+class INVENTOR_API SoColorPacker {
   public:
     // Constructor, makes a colorPacker with NULL packedColor pointer:
     SoColorPacker() {

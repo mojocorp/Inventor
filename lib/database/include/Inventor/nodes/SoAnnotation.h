@@ -98,7 +98,7 @@
 ///    pickCulling          AUTO
 /// }
 /// \endcode
-class SoAnnotation : public SoSeparator {
+class INVENTOR_API SoAnnotation : public SoSeparator {
 
     SO_NODE_HEADER(SoAnnotation);
 

@@ -67,7 +67,7 @@
 /// normalized coordinates, where (0,0) is the lower-left corner of
 /// the window and (1,1) is the upper-right corner.
 /// \sa SbVec2f, SbVec2s
-class SbViewportRegion {
+class INVENTOR_API SbViewportRegion {
   public:
     /// Default constructor. Sets window size to default 100x100
     SbViewportRegion();
@@ -157,8 +157,8 @@ class SbViewportRegion {
     float getPixelsPerPoint() const { return pixelsPerInch / 72.0f; }
 
     /// Equality comparison operator
-    friend int operator==(const SbViewportRegion &reg1,
-                          const SbViewportRegion &reg2);
+    friend INVENTOR_API int operator==(const SbViewportRegion &reg1,
+                                       const SbViewportRegion &reg2);
 
   private:
     SbVec2s windowSize;    // Window size in pixels
@@ -175,4 +175,3 @@ class SbViewportRegion {
     // Adjusts viewport pixel size based on new window size or new viewport
     void adjustViewport();
 };
-

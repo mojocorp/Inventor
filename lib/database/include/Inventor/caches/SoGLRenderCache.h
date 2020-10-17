@@ -81,7 +81,7 @@
 class SoGLDisplayList;
 
 SoEXTENDER
-class SoGLRenderCache : public SoCache {
+class INVENTOR_API SoGLRenderCache : public SoCache {
 
   public:
     /// Constructor

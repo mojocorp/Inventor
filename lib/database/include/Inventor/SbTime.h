@@ -70,7 +70,7 @@
 /// <b>struct timeval</b>
 /// (defined in <em>/usr/include/sys/time.h</em>).
 /// \sa cftime
-class SbTime {
+class INVENTOR_API SbTime {
   public:
     /// Default constructor
     SbTime() {}
@@ -176,10 +176,10 @@ class SbTime {
     SbString formatDate(const char *fmt = "%A, %D %r") const;
 
     /// Addition of two times.
-    friend SbTime operator+(const SbTime &t0, const SbTime &t1);
+    friend INVENTOR_API SbTime operator+(const SbTime &t0, const SbTime &t1);
 
     /// Subtraction of two times.
-    friend SbTime operator-(const SbTime &t0, const SbTime &t1);
+    friend INVENTOR_API SbTime operator-(const SbTime &t0, const SbTime &t1);
 
     /// Destructive addition
     SbTime &operator+=(const SbTime &tm) { return (*this = *this + tm); }
@@ -191,9 +191,11 @@ class SbTime {
     SbTime operator-() const;
 
     /// multiplication by scalar
-    friend SbTime operator*(const SbTime &tm, double s);
+    friend INVENTOR_API SbTime operator*(const SbTime &tm, double s);
 
-    friend SbTime operator*(double s, const SbTime &tm) { return tm * s; }
+    friend INVENTOR_API SbTime operator*(double s, const SbTime &tm) {
+        return tm * s;
+    }
 
     /// destructive multiplication by scalar
     SbTime &operator*=(double s) {
@@ -202,7 +204,7 @@ class SbTime {
     }
 
     /// division by scalar
-    friend SbTime operator/(const SbTime &tm, double s);
+    friend INVENTOR_API SbTime operator/(const SbTime &tm, double s);
 
     /// destructive division by scalar
     SbTime &operator/=(double s) { return (*this = *this / s); }
@@ -230,4 +232,3 @@ class SbTime {
     long tv_sec;
     long tv_usec;
 };
-

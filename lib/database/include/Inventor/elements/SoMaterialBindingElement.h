@@ -66,7 +66,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoMaterialBindingElement : public SoInt32Element {
+class INVENTOR_API SoMaterialBindingElement : public SoInt32Element {
 
     SO_ELEMENT_HEADER(SoMaterialBindingElement);
 

@@ -82,7 +82,7 @@
 ///    on           TRUE
 /// }
 /// \endcode
-class SoBlinker : public SoSwitch {
+class INVENTOR_API SoBlinker : public SoSwitch {
 
     SO_NODE_HEADER(SoBlinker);
 

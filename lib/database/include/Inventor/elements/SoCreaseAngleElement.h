@@ -68,7 +68,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoCreaseAngleElement : public SoFloatElement {
+class INVENTOR_API SoCreaseAngleElement : public SoFloatElement {
 
     SO_ELEMENT_HEADER(SoCreaseAngleElement);
 

@@ -79,7 +79,7 @@ class SoState;
 /// This is an abstract class. See the reference page of a derived class for the
 /// format and default values. \sa
 /// SoCone,SoCube,SoCylinder,SoIndexedNurbsCurve,SoIndexedNurbsSurface,SoNurbsCurve,SoNurbsSurface,SoShapeHints,SoShapeKit,SoSphere,SoText2,SoText3,SoVertexShape
-class SoShape : public SoNode {
+class INVENTOR_API SoShape : public SoNode {
 
     SO_NODE_ABSTRACT_HEADER(SoShape);
 

@@ -153,7 +153,7 @@
 /// SoAppearanceKit,SoBaseKit,SoCameraKit,SoLightKit,SoNodeKit,SoNodeKitDetail,
 /// \sa
 /// SoNodeKitListPart,SoNodeKitPath,SoNodekitCatalog,SoSceneKit,SoSeparatorKit,SoShapeKit
-class SoWrapperKit : public SoSeparatorKit {
+class INVENTOR_API SoWrapperKit : public SoSeparatorKit {
 
     SO_KIT_HEADER(SoWrapperKit);
 

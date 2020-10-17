@@ -69,7 +69,7 @@ class SoPathList;
 /// paste operations.  (The <tt>SoXtClipboard</tt> class passes
 /// <tt>SoByteStream</tt> data during copy and paste.)
 /// \sa SoXtClipboard
-class SoByteStream {
+class INVENTOR_API SoByteStream {
   public:
     /// Constructor.
     SoByteStream();

@@ -84,7 +84,7 @@
 /// }
 /// \endcode
 /// \sa SoScale, SoTransform
-class SoUnits : public SoTransformation {
+class INVENTOR_API SoUnits : public SoTransformation {
 
     SO_NODE_HEADER(SoUnits);
 

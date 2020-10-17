@@ -79,7 +79,7 @@
 /// \endcode
 /// \sa SoLinearProfile, SoNurbsCurve, SoProfileCoordinate2,
 /// SoProfileCoordinate3
-class SoNurbsProfile : public SoProfile {
+class INVENTOR_API SoNurbsProfile : public SoProfile {
 
     SO_NODE_HEADER(SoNurbsProfile);
 

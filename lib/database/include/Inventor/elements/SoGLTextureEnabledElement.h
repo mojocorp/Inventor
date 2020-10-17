@@ -81,7 +81,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoGLTextureEnabledElement : public SoInt32Element {
+class INVENTOR_API SoGLTextureEnabledElement : public SoInt32Element {
 
     SO_ELEMENT_HEADER(SoGLTextureEnabledElement);
 

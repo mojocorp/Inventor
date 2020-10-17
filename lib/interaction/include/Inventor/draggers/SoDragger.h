@@ -244,7 +244,7 @@ typedef void SoDraggerCB(void *userData, SoDragger *dragger);
 /// \sa
 /// SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,SoTransformerDragger,
 /// \sa SoTranslate1Dragger,SoTranslate2Dragger
-class SoDragger : public SoInteractionKit {
+class INVENTOR_API SoDragger : public SoInteractionKit {
 
     SO_KIT_HEADER(SoDragger);
 

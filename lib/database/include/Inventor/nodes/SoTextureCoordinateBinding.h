@@ -79,7 +79,7 @@
 /// \endcode
 /// \sa
 /// SoMaterialBinding,SoNormalBinding,SoTexture2,SoTexture2Transform,SoTextureCoordinate2,SoTextureCoordinateFunction,SoVertexShape
-class SoTextureCoordinateBinding : public SoNode {
+class INVENTOR_API SoTextureCoordinateBinding : public SoNode {
 
     SO_NODE_HEADER(SoTextureCoordinateBinding);
 

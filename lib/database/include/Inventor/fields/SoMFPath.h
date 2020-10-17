@@ -67,7 +67,7 @@
 /// <tt>SoPath</tt> manual page for a description of the file format for a
 /// path).  When more than one value is present, all of the values are
 /// enclosed in square brackets and separated by commas.
-class SoMFPath : public SoMField {
+class INVENTOR_API SoMFPath : public SoMField {
 
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFPath, SoPath *, SoPath *);

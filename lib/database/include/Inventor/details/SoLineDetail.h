@@ -64,7 +64,7 @@
 /// includes the points at the ends of the segment, and the index of the
 /// segment within the shape.
 /// \sa SoDetail, SoPickedPoint, SoPrimitiveVertex, SoVertexShape
-class SoLineDetail : public SoDetail {
+class INVENTOR_API SoLineDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoLineDetail);
 

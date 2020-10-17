@@ -89,7 +89,7 @@ class SoWriteAction;
 /// \par File format/defaults:
 /// This is an abstract class. See the reference page of a derived class for the
 /// format and default values. \sa SoPath, SoAction, SoNodeKit
-class SoNode : public SoFieldContainer {
+class INVENTOR_API SoNode : public SoFieldContainer {
 
   public:
     /// Turns override flag on or off.

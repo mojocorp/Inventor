@@ -86,7 +86,7 @@ class SoCube;
 /// to have an effect on scene graphs.
 /// \sa SoLineHighlightRenderAction, SoGLRenderAction, SoSelection,
 /// SoXtRenderArea, SoDrawStyle, SoInteraction
-class SoBoxHighlightRenderAction : public SoGLRenderAction {
+class INVENTOR_API SoBoxHighlightRenderAction : public SoGLRenderAction {
     SO_ACTION_HEADER(SoBoxHighlightRenderAction);
 
   public:

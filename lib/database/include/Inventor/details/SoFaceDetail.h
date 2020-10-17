@@ -72,7 +72,7 @@
 /// <tt>SoPrimitiveVertex</tt>), it will contain details for only the three
 /// vertices of the triangle.
 /// \sa SoDetail, SoPickedPoint, SoPrimitiveVertex, SoVertexShape
-class SoFaceDetail : public SoDetail {
+class INVENTOR_API SoFaceDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoFaceDetail);
 

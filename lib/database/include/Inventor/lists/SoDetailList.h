@@ -71,7 +71,7 @@ class SoDetail;
 /// This subclass of <tt>SbPList</tt> holds lists of instances of
 /// classes derived from <tt>SoDetail</tt>.
 /// \sa SoDetail
-class SoDetailList : public SbPList {
+class INVENTOR_API SoDetailList : public SbPList {
   public:
     /// Constructor
     SoDetailList() : SbPList() {}

@@ -79,7 +79,7 @@
 /// interactive 3D manipulators and viewers.
 /// \sa
 /// SbCylinderProjector,SbCylinderPlaneProjector,SbCylinderSectionProjector,SbCylinderSheetProjector,SbLineProjector,SbPlaneProjector,SbSphereSheetProjector
-class SbSpherePlaneProjector : public SbSphereSectionProjector {
+class INVENTOR_API SbSpherePlaneProjector : public SbSphereSectionProjector {
   public:
     /// Default constructor.
     /// The default view volume is undefined.

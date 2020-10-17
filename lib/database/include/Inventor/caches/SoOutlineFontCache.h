@@ -78,7 +78,7 @@ typedef void SideCB(int nPoints, const SbVec3f *points1, const SbVec3f *norms1,
 // This is pretty heavyweight-- it is responsible for doing all of the
 // grunt work of figuring out the polygons making up the characters in
 // the font.
-class SoOutlineFontCache : public SoFontCache {
+class INVENTOR_API SoOutlineFontCache : public SoFontCache {
   public:
     // Given a state, find an appropriate outline font.
     static SoOutlineFontCache *getFont(SoState *, SbBool forRender);

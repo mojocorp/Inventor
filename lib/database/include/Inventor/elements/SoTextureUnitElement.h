@@ -66,7 +66,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoTextureUnitElement : public SoInt32Element {
+class INVENTOR_API SoTextureUnitElement : public SoInt32Element {
     SO_ELEMENT_HEADER(SoTextureUnitElement);
 
   public:

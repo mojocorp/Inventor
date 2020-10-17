@@ -73,7 +73,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoPickRayElement : public SoElement {
+class INVENTOR_API SoPickRayElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoPickRayElement);
 

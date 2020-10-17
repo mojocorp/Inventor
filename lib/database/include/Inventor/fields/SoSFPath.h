@@ -68,7 +68,7 @@ class SoPath;
 /// <tt>SoPath</tt> manual page for a description of the file format for a
 /// path.
 /// \sa SoField, SoSField, SoMFPath, SoPath
-class SoSFPath : public SoSField {
+class INVENTOR_API SoSFPath : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFPath, SoPath *, SoPath *);

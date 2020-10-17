@@ -94,7 +94,7 @@ class SoGetBoundingBoxAction;
 /// }
 /// \endcode
 /// \sa SoEngineOutput, SoGetBoundingBoxAction, SbBox3f
-class SoComputeBoundingBox : public SoEngine {
+class INVENTOR_API SoComputeBoundingBox : public SoEngine {
 
     SO_ENGINE_HEADER(SoComputeBoundingBox);
 

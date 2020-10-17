@@ -68,7 +68,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoNormalCache : public SoCache {
+class INVENTOR_API SoNormalCache : public SoCache {
 
   public:
     /// Constructor and destructor

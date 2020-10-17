@@ -68,7 +68,7 @@
 
 /// Element that stores the current transparency type.
 SoEXTENDER
-class SoTransparencyTypeElement : public SoInt32Element {
+class INVENTOR_API SoTransparencyTypeElement : public SoInt32Element {
 
     SO_ELEMENT_HEADER(SoTransparencyTypeElement);
 

@@ -86,7 +86,7 @@
 #include <Inventor/elements/SoSubElement.h>
 
 SoEXTENDER
-class SoAccumulatedElement : public SoElement {
+class INVENTOR_API SoAccumulatedElement : public SoElement {
 
     SO_ELEMENT_ABSTRACT_HEADER(SoAccumulatedElement);
 

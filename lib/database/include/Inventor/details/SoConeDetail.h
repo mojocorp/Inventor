@@ -62,7 +62,7 @@
 /// This class contains detail information about a point on a cone.
 /// It contains the part of the cone that was hit (sides or bottom).
 /// \sa SoCone, SoDetail, SoPickedPoint, SoPrimitiveVertex
-class SoConeDetail : public SoDetail {
+class INVENTOR_API SoConeDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoConeDetail);
 

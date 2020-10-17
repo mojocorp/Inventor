@@ -73,7 +73,7 @@
 /// #SoBaseKit::setSearchingChildren(),
 /// which allow you to query and control this behavior.
 /// \sa SoPath, SoBaseKit
-class SoSearchAction : public SoAction {
+class INVENTOR_API SoSearchAction : public SoAction {
 
     SO_ACTION_HEADER(SoSearchAction);
 

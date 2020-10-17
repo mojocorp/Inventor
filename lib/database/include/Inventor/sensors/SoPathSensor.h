@@ -69,7 +69,7 @@
 /// end of the path chain is considered in the path.  See the <tt>SoPath</tt>
 /// manual page for more information on paths.
 /// \sa SoNodeSensor, SoPathSensor, SoDataSensor
-class SoPathSensor : public SoDataSensor {
+class INVENTOR_API SoPathSensor : public SoDataSensor {
 
   public:
     /// Constructor.

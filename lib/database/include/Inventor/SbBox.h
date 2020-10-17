@@ -70,7 +70,7 @@
 /// <tt>SoGetBoundingBoxAction</tt>).
 /// \sa SbXfBox3f, SbBox2f, SbBox2s, SbVec3f, SbVec2f, SbVec2s, SbMatrix,
 /// SoGetBoundingBoxAction
-class SbBox3f {
+class INVENTOR_API SbBox3f {
   public:
     /// Default constructor - leaves box totally empty
     SbBox3f() { makeEmpty(); }
@@ -211,8 +211,8 @@ class SbBox3f {
     float getVolume() const;
 
     /// Equality comparisons
-    friend int operator==(const SbBox3f &b1, const SbBox3f &b2);
-    friend int operator!=(const SbBox3f &b1, const SbBox3f &b2) {
+    friend INVENTOR_API int operator==(const SbBox3f &b1, const SbBox3f &b2);
+    friend INVENTOR_API int operator!=(const SbBox3f &b1, const SbBox3f &b2) {
         return !(b1 == b2);
     }
 
@@ -231,7 +231,7 @@ class SbBox3f {
 /// have been done, the box can be expanded to an axis-aligned box if necessary.
 /// \sa SbBox3f, SbBox2f, SbBox2s, SbVec3f, SbVec2f, SbVec2s,     SbMatrix,
 /// SoGetBoundingBoxAction
-class SbXfBox3f : private SbBox3f {
+class INVENTOR_API SbXfBox3f : private SbBox3f {
   public:
     /// Default constructor - leaves box totally empty
     SbXfBox3f();
@@ -351,8 +351,10 @@ class SbXfBox3f : private SbBox3f {
     SbBox3f project() const;
 
     /// Equality comparisons
-    friend int operator==(const SbXfBox3f &b1, const SbXfBox3f &b2);
-    friend int operator!=(const SbXfBox3f &b1, const SbXfBox3f &b2) {
+    friend INVENTOR_API int operator==(const SbXfBox3f &b1,
+                                       const SbXfBox3f &b2);
+    friend INVENTOR_API int operator!=(const SbXfBox3f &b1,
+                                       const SbXfBox3f &b2) {
         return !(b1 == b2);
     }
 
@@ -373,7 +375,7 @@ class SbXfBox3f : private SbBox3f {
 /// of the standard Inventor datatype classes and is used as input and output
 /// to geometry operations.
 /// \sa SbBox3f, SbXfBox3f, SbBox2s, SbVec3f, SbVec2f, SbVec2s, SbMatrix
-class SbBox2f {
+class INVENTOR_API SbBox2f {
   public:
     /// Default constructor - leaves box totally empty
     SbBox2f() { makeEmpty(); };
@@ -479,10 +481,10 @@ class SbBox2f {
     SbBool hasArea() const { return (max[0] > min[0] && max[1] > min[1]); }
 
     /// Equality comparison
-    friend int operator==(const SbBox2f &b1, const SbBox2f &b2);
+    friend INVENTOR_API int operator==(const SbBox2f &b1, const SbBox2f &b2);
 
     /// Inequality comparison
-    friend int operator!=(const SbBox2f &b1, const SbBox2f &b2) {
+    friend INVENTOR_API int operator!=(const SbBox2f &b1, const SbBox2f &b2) {
         return !(b1 == b2);
     }
 
@@ -498,7 +500,7 @@ class SbBox2f {
 /// the standard Inventor datatype classes and is used as input and output to
 /// geometry operations.
 /// \sa SbBox3f, SbXfBox3f, SbBox2f, SbVec3f, SbVec2f, SbVec2s, SbMatrix
-class SbBox2s {
+class INVENTOR_API SbBox2s {
   public:
     /// Default constructor - leaves box totally empty
     SbBox2s() { makeEmpty(); };
@@ -594,10 +596,10 @@ class SbBox2s {
     SbBool isEmpty() const { return max[0] < min[0]; }
 
     /// Equality comparisons
-    friend int operator==(const SbBox2s &b1, const SbBox2s &b2);
+    friend INVENTOR_API int operator==(const SbBox2s &b1, const SbBox2s &b2);
 
     /// Inequality comparison
-    friend int operator!=(const SbBox2s &b1, const SbBox2s &b2) {
+    friend INVENTOR_API int operator!=(const SbBox2s &b1, const SbBox2s &b2) {
         return !(b1 == b2);
     }
 
@@ -605,4 +607,3 @@ class SbBox2s {
     // Minimum and maximum points
     SbVec2s min, max;
 };
-

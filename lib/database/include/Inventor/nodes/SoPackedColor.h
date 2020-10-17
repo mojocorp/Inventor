@@ -90,7 +90,7 @@
 /// }
 /// \endcode
 /// \sa SoBaseColor, SoMaterial
-class SoPackedColor : public SoNode {
+class INVENTOR_API SoPackedColor : public SoNode {
 
     SO_NODE_HEADER(SoPackedColor);
 

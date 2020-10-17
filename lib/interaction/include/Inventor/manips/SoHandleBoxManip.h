@@ -100,7 +100,7 @@
 /// \sa
 /// SoCenterballManip,SoHandleBoxDragger,SoJackManip,SoTabBoxManip,SoTrackballManip,SoTransformBoxManip,SoTransformerManip,SoTransform,SoTransformManip
 
-class SoHandleBoxManip : public SoTransformManip {
+class INVENTOR_API SoHandleBoxManip : public SoTransformManip {
 
     SO_NODE_HEADER(SoHandleBoxManip);
 

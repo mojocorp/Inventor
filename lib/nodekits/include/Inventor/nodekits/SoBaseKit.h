@@ -321,7 +321,7 @@ class SoGroup;
 /// \endcode
 /// \sa
 /// SoAppearanceKit,SoCameraKit,SoLightKit,SoNodeKit,SoNodeKitDetail,SoNodeKitListPart,SoNodeKitPath,SoNodekitCatalog,SoSceneKit,SoSeparatorKit,SoShapeKit,SoWrapperKit
-class SoBaseKit : public SoNode {
+class INVENTOR_API SoBaseKit : public SoNode {
 
     // Instead of calling SO_KIT_HEADER(className) here,
     // which is the norm for all nodekits, explicitly write the contents

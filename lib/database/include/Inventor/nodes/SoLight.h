@@ -80,7 +80,7 @@
 /// This is an abstract class. See the reference page of a derived class for the
 /// format and default values. \sa SoDirectionalLight, SoEnvironment,SoLightKit,
 /// SoLightModel, SoMaterial, SoPointLight,SoSpotLight
-class SoLight : public SoNode {
+class INVENTOR_API SoLight : public SoNode {
 
     SO_NODE_ABSTRACT_HEADER(SoLight);
 

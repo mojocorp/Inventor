@@ -108,6 +108,8 @@
 #include <Inventor/nodekits/SoNodekitCatalog.h>
 #include <Inventor/nodekits/SoNodeKitListPart.h>
 
+class SoNodekitCatalog;
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Macros to be called within the class definition header for a SoBaseKit

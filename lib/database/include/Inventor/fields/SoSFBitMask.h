@@ -86,7 +86,7 @@
 /// The field values may also be represented as integers, but this is not
 /// guaranteed to be portable.
 /// \sa SoField, SoSField, SoMFBitMask
-class SoSFBitMask : public SoSFEnum {
+class INVENTOR_API SoSFBitMask : public SoSFEnum {
 
     // Use standard field stuff for derived class;
     // the rest is inherited from SoSFEnum

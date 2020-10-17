@@ -105,7 +105,7 @@
 /// }
 /// \endcode
 /// \sa SoVertexShape
-class SoShapeHints : public SoNode {
+class INVENTOR_API SoShapeHints : public SoNode {
 
     SO_NODE_HEADER(SoShapeHints);
 

@@ -134,7 +134,7 @@ class SoFullPath;
 /// SoCenterballManip,SoHandleBoxDragger, \sa SoHandleBoxManip,SoJackDragger,
 /// SoJackManip,SoTabBoxDragger, SoTabBoxManip,SoTrackballDragger, \sa
 /// SoTrackballManip,SoTransformBoxDragger, SoTransformBoxManip
-class SoSurroundScale : public SoTransformation {
+class INVENTOR_API SoSurroundScale : public SoTransformation {
 
     SO_NODE_HEADER(SoSurroundScale);
 

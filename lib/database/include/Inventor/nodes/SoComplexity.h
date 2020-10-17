@@ -107,7 +107,7 @@
 /// }
 /// \endcode
 /// \sa SoShape, SoShapeHints, SoTexture2
-class SoComplexity : public SoNode {
+class INVENTOR_API SoComplexity : public SoNode {
 
     SO_NODE_HEADER(SoComplexity);
 

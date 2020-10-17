@@ -63,7 +63,7 @@
 ///
 /// <tt>SoSFFloats</tt> are written to file in standard scientific notation.
 /// \sa SoField, SoSField, SoMFFloat
-class SoSFFloat : public SoSField {
+class INVENTOR_API SoSFFloat : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFFloat, float, float);

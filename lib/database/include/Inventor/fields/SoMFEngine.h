@@ -70,7 +70,7 @@ class SoEngine;
 /// example:
 ///
 /// [ ElapsedTime { }, OneShot { duration 2.0 }, USE myCalculator ]
-class SoMFEngine : public SoMField {
+class INVENTOR_API SoMFEngine : public SoMField {
 
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFEngine, SoEngine *, SoEngine *);

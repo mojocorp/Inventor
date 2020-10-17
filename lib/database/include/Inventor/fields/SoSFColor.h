@@ -68,7 +68,7 @@
 /// floating point numbers in standard scientific notation, in the range
 /// 0.0 to 1.0.
 /// \sa SoField, SoSField, SoMFColor, SbColor
-class SoSFColor : public SoSField {
+class INVENTOR_API SoSFColor : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFColor, SbColor, const SbColor &);

@@ -89,7 +89,7 @@
 /// This is an abstract class. See the reference page of a derived class for the
 /// format and default values. \sa
 /// SoFaceSet,SoIndexedShape,SoLineSet,SoPointSet,SoQuadMesh,SoTriangleStripSet,SoVertexProperty
-class SoNonIndexedShape : public SoVertexShape {
+class INVENTOR_API SoNonIndexedShape : public SoVertexShape {
 
     SO_NODE_ABSTRACT_HEADER(SoNonIndexedShape);
 

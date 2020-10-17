@@ -164,7 +164,7 @@
 /// \sa SoIndexedTriangleStripSet, SoIndexedFaceSet, SoIndexedLineSet,
 /// SoTriangleStripSet, \sa SoLineSet, SoFaceSet, SoPointSet, SoQuadMesh,
 /// SoVertexShape, SoIndexedShape, SoNonindexedShape
-class SoVertexProperty : public SoNode {
+class INVENTOR_API SoVertexProperty : public SoNode {
 
     SO_NODE_HEADER(SoVertexProperty);
 
@@ -244,7 +244,7 @@ class SoVertexProperty : public SoNode {
 typedef void SoVPCacheFunc(const char *const);
 
 SoEXTENDER
-class SoVertexPropertyCache {
+class INVENTOR_API SoVertexPropertyCache {
   public:
     // API used by shapes:
 

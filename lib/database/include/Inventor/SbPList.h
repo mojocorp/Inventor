@@ -63,7 +63,7 @@
 /// \ingroup Basics
 /// This class manages a dynamic list of generic <b>void *</b> pointers.
 /// This class allows random access, insertion, and removal.
-class SbPList {
+class INVENTOR_API SbPList {
   public:
     /// Constructor
     SbPList();

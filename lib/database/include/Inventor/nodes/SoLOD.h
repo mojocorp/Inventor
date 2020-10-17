@@ -102,7 +102,7 @@
 /// }
 /// \endcode
 /// \sa SoSwitch, SoGroup
-class SoLOD : public SoGroup {
+class INVENTOR_API SoLOD : public SoGroup {
 
     SO_NODE_HEADER(SoLOD);
 

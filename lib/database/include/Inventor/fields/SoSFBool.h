@@ -64,7 +64,7 @@
 /// <tt>SoSFBools</tt> may be written to file as "0" (representing FALSE), "1",
 /// "TRUE", or "FALSE".
 /// \sa SoField, SoSField, SoMFBool
-class SoSFBool : public SoSField {
+class INVENTOR_API SoSFBool : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFBool, SbBool, SbBool);

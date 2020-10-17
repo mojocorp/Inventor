@@ -71,7 +71,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoINTERNAL
-class SoTempPath : public SoFullPath {
+class INVENTOR_API SoTempPath : public SoFullPath {
   public:
     /// Constructor given approximate number of nodes in chain
     SoTempPath(int approxLength);

@@ -82,7 +82,7 @@
 /// }
 /// \endcode
 /// \sa SoEngineOutput, SoSFTrigger
-class SoTriggerAny : public SoEngine {
+class INVENTOR_API SoTriggerAny : public SoEngine {
 
     SO_ENGINE_HEADER(SoTriggerAny);
 

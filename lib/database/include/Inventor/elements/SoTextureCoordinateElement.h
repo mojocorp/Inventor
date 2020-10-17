@@ -86,7 +86,7 @@ typedef const SbVec4f &SoTextureCoordinateFunctionCB(void *         userdata,
                                                      const SbVec3f &normal);
 
 SoEXTENDER
-class SoTextureCoordinateElement : public SoReplacedElement {
+class INVENTOR_API SoTextureCoordinateElement : public SoReplacedElement {
 
     SO_ELEMENT_HEADER(SoTextureCoordinateElement);
 

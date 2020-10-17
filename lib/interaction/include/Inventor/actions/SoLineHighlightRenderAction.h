@@ -82,7 +82,7 @@ class SoTexture2;
 /// to have an affect on scene graphs.
 /// \sa SoBoxHighlightRenderAction, SoGLRenderAction, SoSelection,
 /// SoXtRenderArea, SoDrawStyle, SoInteraction
-class SoLineHighlightRenderAction : public SoGLRenderAction {
+class INVENTOR_API SoLineHighlightRenderAction : public SoGLRenderAction {
     SO_ACTION_HEADER(SoLineHighlightRenderAction);
 
   public:

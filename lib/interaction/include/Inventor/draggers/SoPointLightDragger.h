@@ -193,7 +193,7 @@ class SoFieldSensor;
 /// \sa
 /// SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,SoTransformerDragger,
 /// \sa SoTranslate1Dragger,SoTranslate2Dragger
-class SoPointLightDragger : public SoDragger {
+class INVENTOR_API SoPointLightDragger : public SoDragger {
     SO_KIT_HEADER(SoPointLightDragger);
 
     // This gives the dragger an overall material.  It is edited by lightManips

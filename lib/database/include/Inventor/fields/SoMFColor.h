@@ -75,7 +75,7 @@
 ///
 /// represents the three colors red, green, and blue.
 /// \sa SbColor
-class SoMFColor : public SoMField {
+class INVENTOR_API SoMFColor : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFColor, SbColor, const SbColor &);
 

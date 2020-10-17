@@ -73,7 +73,7 @@
 /// \sa SoButtonEvent, SoKeyboardEvent, SoLocation2Event, SoMotion3Event,
 /// \sa SoMouseButtonEvent, SoSpaceballButtonEvent,SoHandleEventAction,
 /// \sa SoEventCallback, SoSelection, SoInteraction,SoXtDevice, SoXtRenderArea
-class SoEvent {
+class INVENTOR_API SoEvent {
   public:
     /// Constructor and destructor
     SoEvent();

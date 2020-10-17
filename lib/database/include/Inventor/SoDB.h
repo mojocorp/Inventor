@@ -102,7 +102,7 @@ typedef void SoDBHeaderCB(void *userData, SoInput *in);
 /// \endcode
 /// \sa SoBase, SoNode, SoEngine, SoField, SoInput, SoFile, SoPath,
 /// SoOneShotSensor, SoDataSensor, SoXt
-class SoDB {
+class INVENTOR_API SoDB {
 
   public:
     /// Initialization routine. Creates global database

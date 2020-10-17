@@ -74,7 +74,7 @@
 /// Inventor method that detected the error, to aid the programmer in
 /// debugging.
 /// \sa SoMemoryError, SoReadError
-class SoDebugError : public SoError {
+class INVENTOR_API SoDebugError : public SoError {
 
   public:
     enum Severity {

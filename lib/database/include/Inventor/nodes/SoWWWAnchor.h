@@ -95,7 +95,7 @@ typedef void SoWWWAnchorCB(const SbString &url, void *userData,
 /// }
 /// \endcode
 /// \sa SoWWWInline
-class SoWWWAnchor : public SoLocateHighlight {
+class INVENTOR_API SoWWWAnchor : public SoLocateHighlight {
 
     SO_NODE_HEADER(SoWWWAnchor);
 

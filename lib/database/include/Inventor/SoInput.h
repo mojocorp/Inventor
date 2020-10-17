@@ -83,7 +83,7 @@ struct SoInputFile;
 /// line) and can stack input files. When EOF is reached, the stack is
 /// popped.  This class can also be used to read from a buffer in memory.
 /// \sa SoDB, SoOutput, SoTranReceiver
-class SoInput {
+class INVENTOR_API SoInput {
   public:
     /// Constructor (default SoInput reads from stdin)
     SoInput();

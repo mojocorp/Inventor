@@ -81,7 +81,7 @@ class SoNotList;
 /// the callback function to determine exactly which node, field, or path
 /// caused the sensor to be triggered.
 /// \sa SoNodeSensor, SoPathSensor, SoFieldSensor, SoDelayQueueSensor
-class SoDataSensor : public SoDelayQueueSensor {
+class INVENTOR_API SoDataSensor : public SoDelayQueueSensor {
 
   public:
     /// Constructor.

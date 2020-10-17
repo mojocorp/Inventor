@@ -88,7 +88,7 @@
 /// }
 /// \endcode
 /// \sa SoDirectionalLight, SoPointLight
-class SoSpotLight : public SoLight {
+class INVENTOR_API SoSpotLight : public SoLight {
 
     SO_NODE_HEADER(SoSpotLight);
 

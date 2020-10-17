@@ -65,7 +65,7 @@
 /// <tt>SoSFVec3fs</tt> are written to file as three floating
 /// point values separated by whitespace.
 /// \sa SoField, SoSField, SoMFVec3f
-class SoSFVec3f : public SoSField {
+class INVENTOR_API SoSFVec3f : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFVec3f, SbVec3f, const SbVec3f &);
 

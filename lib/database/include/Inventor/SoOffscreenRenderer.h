@@ -74,7 +74,7 @@ class SoGLRenderAction;
 /// printable image or to generate a texture image. It uses X Pixmaps for
 /// rendering. Methods are provided to write the buffer to a file, either
 /// as an RGB image or an encapsulated PostScript description.
-class SoOffscreenRenderer {
+class INVENTOR_API SoOffscreenRenderer {
   public:
     /// Constructor. An internal instance of an SoGLRenderAction will be
     /// maintained with a viewport region set to the on passed in by the

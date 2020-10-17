@@ -136,7 +136,7 @@
 /// \endcode
 /// \sa
 /// SoDragger,SoSpotLight,SoSpotLightDragger,SoDirectionalLightManip,SoPointLightManip
-class SoSpotLightManip : public SoSpotLight {
+class INVENTOR_API SoSpotLightManip : public SoSpotLight {
     SO_NODE_HEADER(SoSpotLightManip);
 
   public:

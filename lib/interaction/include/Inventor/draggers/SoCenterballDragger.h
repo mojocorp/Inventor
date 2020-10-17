@@ -232,7 +232,7 @@ class SoGetMatrixAction;
 /// \endcode
 /// \sa
 /// SoInteractionKit,SoDragger,SoDirectionalLightDragger,SoDragPointDragger,SoHandleBoxDragger,SoJackDragger,SoPointLightDragger,SoRotateCylindricalDragger,SoRotateDiscDragger,SoRotateSphericalDragger,SoScale1Dragger,SoScale2Dragger,SoScale2UniformDragger,SoScaleUniformDragger,SoSpotLightDragger,SoTabBoxDragger,SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,SoTranslate1Dragger,SoTranslate2Dragger
-class SoCenterballDragger : public SoDragger {
+class INVENTOR_API SoCenterballDragger : public SoDragger {
 
     SO_KIT_HEADER(SoCenterballDragger);
 

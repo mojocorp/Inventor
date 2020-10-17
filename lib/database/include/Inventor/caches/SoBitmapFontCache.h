@@ -71,7 +71,7 @@ class SoGLDisplayList;
 // use the normal list of elements used to determine validity, etc,
 // and knows exactly which elements it depends on.
 
-class SoBitmapFontCache : public SoFontCache {
+class INVENTOR_API SoBitmapFontCache : public SoFontCache {
   public:
     // Return a font (either a new one or an old one) that is valid
     // for the given state.

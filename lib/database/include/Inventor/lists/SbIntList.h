@@ -72,7 +72,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoINTERNAL
-class SbIntList : public SbPList {
+class INVENTOR_API SbIntList : public SbPList {
 
   public:
     /// Constructors, similar to SbPList

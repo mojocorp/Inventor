@@ -78,7 +78,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoModelMatrixElement : public SoAccumulatedElement {
+class INVENTOR_API SoModelMatrixElement : public SoAccumulatedElement {
 
     SO_ELEMENT_HEADER(SoModelMatrixElement);
 

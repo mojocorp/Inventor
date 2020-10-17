@@ -88,7 +88,7 @@
 /// \endcode
 /// \sa SoCenterballDragger, SoJackDragger, SoTrackballDragger,
 /// SoTransformerDragger,SoTransformation, SoTransformBoxDragger
-class SoAntiSquish : public SoTransformation {
+class INVENTOR_API SoAntiSquish : public SoTransformation {
 
     SO_NODE_HEADER(SoAntiSquish);
 

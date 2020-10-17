@@ -70,7 +70,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoGLEnvironmentElement : public SoEnvironmentElement {
+class INVENTOR_API SoGLEnvironmentElement : public SoEnvironmentElement {
     SO_ELEMENT_HEADER(SoGLEnvironmentElement);
 
   public:

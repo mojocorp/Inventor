@@ -72,7 +72,7 @@
 #include <Inventor/elements/SoSubElement.h>
 
 SoEXTENDER
-class SoFloatElement : public SoElement {
+class INVENTOR_API SoFloatElement : public SoElement {
 
     SO_ELEMENT_ABSTRACT_HEADER(SoFloatElement);
 

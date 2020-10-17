@@ -77,7 +77,7 @@ struct So_ClipPlane;
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoClipPlaneElement : public SoAccumulatedElement {
+class INVENTOR_API SoClipPlaneElement : public SoAccumulatedElement {
 
     SO_ELEMENT_HEADER(SoClipPlaneElement);
 

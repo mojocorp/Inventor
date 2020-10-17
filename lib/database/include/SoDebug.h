@@ -59,6 +59,8 @@
 
 #pragma once
 
+#include <Inventor/SbBasic.h>
+
 class SoBase;
 class SoNode;
 class SoField;
@@ -73,7 +75,7 @@ class SoField;
 ///	triggered/etc
 /// - IV_DEBUG_CACHES   : print out info on cache validity, etc.
 /// - IV_DEBUG_CACHELIST : print out info on Separator render caches.
-class SoDebug {
+class INVENTOR_API SoDebug {
   public:
     /// Returns value of environment variable; faster than getenv()
     /// because the environment variables are stored in a dictionary.
@@ -110,4 +112,3 @@ class SoDebug {
     /// when called from within a debugger!
     static void printName(SoBase *base);
 };
-

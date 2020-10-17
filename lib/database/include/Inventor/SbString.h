@@ -66,7 +66,7 @@
 /// Strings which have many convenience methods to make
 /// string manipulation easier.
 /// \sa SbName
-class SbString {
+class INVENTOR_API SbString {
   public:
     /// Default constructor
     SbString() {}
@@ -151,36 +151,39 @@ class SbString {
     bool operator!() const { return string.empty(); }
 
     /// Equality operator for SbString/char* and SbString/SbString comparison
-    friend bool operator==(const SbString &str, const char *s);
+    friend INVENTOR_API bool operator==(const SbString &str, const char *s);
 
     /// Returns true if str1 is equal to str2; otherwise returns false.
-    friend bool operator==(const char *s, const SbString &str) {
+    friend INVENTOR_API bool operator==(const char *s, const SbString &str) {
         return (str.string == s);
     }
 
     /// Returns true if str1 is equal to str2; otherwise returns false.
-    friend bool operator==(const SbString &str1, const SbString &str2) {
+    friend INVENTOR_API bool operator==(const SbString &str1,
+                                        const SbString &str2) {
         return (str1.string == str2.string);
     }
 
     /// Returns true if this string str1 is not equal to string str2; otherwise
     /// returns false.
-    friend bool operator!=(const SbString &str, const char *s);
+    friend INVENTOR_API bool operator!=(const SbString &str, const char *s);
 
     /// Returns true if this string str1 is not equal to string str2; otherwise
     /// returns false.
-    friend bool operator!=(const char *s, const SbString &str) {
+    friend INVENTOR_API bool operator!=(const char *s, const SbString &str) {
         return (str.string != s);
     }
 
     /// Returns a string which is the result of concatenating s1 and s2.
-    friend const SbString operator+(const SbString &s1, const SbString &s2) {
+    friend INVENTOR_API const SbString operator+(const SbString &s1,
+                                                 const SbString &s2) {
         SbString t(s1);
         t += s2;
         return t;
     }
 
-    friend int operator!=(const SbString &str1, const SbString &str2) {
+    friend INVENTOR_API int operator!=(const SbString &str1,
+                                       const SbString &str2) {
         return (str1.string != str2.string);
     }
 
@@ -200,4 +203,3 @@ class SbString {
   private:
     std::string string; // String storage
 };
-

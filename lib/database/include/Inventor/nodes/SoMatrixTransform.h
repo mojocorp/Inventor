@@ -80,7 +80,7 @@
 /// }
 /// \endcode
 /// \sa SoTransform, SoMultipleCopy
-class SoMatrixTransform : public SoTransformation {
+class INVENTOR_API SoMatrixTransform : public SoTransformation {
 
     SO_NODE_HEADER(SoMatrixTransform);
 

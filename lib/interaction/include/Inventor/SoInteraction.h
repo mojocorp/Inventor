@@ -66,7 +66,7 @@
 /// the database.
 /// Note that #SoInteraction::init() is already called by SoXt::init()
 /// \sa SoDB, SoNodeKit, SoXt
-class SoInteraction {
+class INVENTOR_API SoInteraction {
   public:
     /// init all interaction classes
     static void init();

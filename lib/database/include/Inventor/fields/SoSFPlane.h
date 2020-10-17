@@ -67,7 +67,7 @@
 /// the plane, the fourth is the distance of the plane from the origin
 /// (in the direction of the normal).
 /// \sa SbPlane, SoField, SoSField, SoMFPlane
-class SoSFPlane : public SoSField {
+class INVENTOR_API SoSFPlane : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFPlane, SbPlane, const SbPlane &);
 

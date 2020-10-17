@@ -71,7 +71,7 @@
 /// \endcode
 /// \sa
 /// SoTexture2,SoTexture2TransformSoTextureCoordinate2,SoTextureCoordinateBinding,SoTextureCoordinateDefault,SoTextureCoordinateEnvironment,SoTextureCoordinatePlane,
-class SoTextureCoordinateFunction : public SoNode {
+class INVENTOR_API SoTextureCoordinateFunction : public SoNode {
 
     SO_NODE_HEADER(SoTextureCoordinateFunction);
 

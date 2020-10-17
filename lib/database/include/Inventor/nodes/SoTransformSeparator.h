@@ -80,7 +80,7 @@
 /// }
 /// \endcode
 /// \sa SoResetTransform, SoTransformation
-class SoTransformSeparator : public SoGroup {
+class INVENTOR_API SoTransformSeparator : public SoGroup {
 
     SO_NODE_HEADER(SoTransformSeparator);
 

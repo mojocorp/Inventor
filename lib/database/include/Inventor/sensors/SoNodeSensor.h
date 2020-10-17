@@ -65,7 +65,7 @@
 /// whenever any field of the node or, if the node is a group node, any
 /// children of the node change.
 /// \sa SoFieldSensor, SoPathSensor, SoDataSensor
-class SoNodeSensor : public SoDataSensor {
+class INVENTOR_API SoNodeSensor : public SoDataSensor {
 
   public:
     /// Constructor.

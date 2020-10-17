@@ -77,7 +77,7 @@ class SoEngine;
 ///
 /// is an SoSFEngine field that points to a engine named 'calculator' that was
 /// DEF'ed earlier in the scene. \sa SoField, SoSField, SoMFEngine, SoEngine
-class SoSFEngine : public SoSField {
+class INVENTOR_API SoSFEngine : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFEngine, SoEngine *, SoEngine *);

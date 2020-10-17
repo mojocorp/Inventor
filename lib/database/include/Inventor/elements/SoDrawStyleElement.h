@@ -66,7 +66,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoDrawStyleElement : public SoInt32Element {
+class INVENTOR_API SoDrawStyleElement : public SoInt32Element {
 
     SO_ELEMENT_HEADER(SoDrawStyleElement);
 

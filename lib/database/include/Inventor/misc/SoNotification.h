@@ -95,7 +95,7 @@ class SoField;
 //////////////////////////////////////////////////////////////////////////////
 
 SoINTERNAL
-class SoNotRec {
+class INVENTOR_API SoNotRec {
 
   public:
     /// Notification types (what receives notification). Note that
@@ -150,7 +150,7 @@ class SoNotRec {
 //////////////////////////////////////////////////////////////////////////////
 
 SoINTERNAL
-class SoNotList {
+class INVENTOR_API SoNotList {
 
   public:
     /// Constructor

@@ -73,7 +73,7 @@
 //
 ////////////////////////////////////////////////////////////////////
 SoINTERNAL
-class SoV1NodekitCatalogEntry {
+class INVENTOR_API SoV1NodekitCatalogEntry {
   private:
     SbName name;              // Reference name of this entry
     SoType type;              // Type of node allowable for setting
@@ -143,7 +143,7 @@ class SoV1NodekitCatalogEntry {
 //    Class: SoV1NodekitCatalog
 ////////////////////////////////////////////////////////////////////
 SoEXTENDER
-class SoV1NodekitCatalog {
+class INVENTOR_API SoV1NodekitCatalog {
 
   public:
     // initializes static variables.

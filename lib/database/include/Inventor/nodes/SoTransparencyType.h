@@ -60,7 +60,7 @@
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoTransparencyTypeElement.h>
 
-class SoTransparencyType : public SoNode {
+class INVENTOR_API SoTransparencyType : public SoNode {
 
     SO_NODE_HEADER(SoTransparencyType);
 

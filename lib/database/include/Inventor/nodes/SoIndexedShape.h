@@ -114,7 +114,7 @@
 /// format and default values. \sa
 /// SoIndexedFaceSet,SoIndexedLineSet,SoIndexedTriangleStripSet,SoMaterialBinding,SoNonIndexedShape,
 /// \sa SoNormalBinding,SoShapeHints,SoTextureCoordinateBinding
-class SoIndexedShape : public SoVertexShape {
+class INVENTOR_API SoIndexedShape : public SoVertexShape {
 
     SO_NODE_ABSTRACT_HEADER(SoIndexedShape);
 

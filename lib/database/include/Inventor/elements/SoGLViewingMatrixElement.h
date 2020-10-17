@@ -71,7 +71,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoGLViewingMatrixElement : public SoViewingMatrixElement {
+class INVENTOR_API SoGLViewingMatrixElement : public SoViewingMatrixElement {
 
     SO_ELEMENT_HEADER(SoGLViewingMatrixElement);
 

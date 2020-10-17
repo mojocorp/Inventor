@@ -92,7 +92,7 @@
 /// format and default values. \sa SoEngineOutput, SoInterpolateFloat,
 /// SoInterpolateRotation,SoInterpolateVec2f, SoInterpolateVec3f,
 /// SoInterpolateVec4f
-class SoInterpolate : public SoEngine {
+class INVENTOR_API SoInterpolate : public SoEngine {
 
     SO_ENGINE_ABSTRACT_HEADER(SoInterpolate);
 
@@ -222,7 +222,7 @@ class SoInterpolate : public SoEngine {
 /// \endcode
 /// \sa SoEngineOutput, SoInterpolateRotation,SoInterpolateVec2f,
 /// SoInterpolateVec3f, SoInterpolateVec4f
-class SoInterpolateFloat : public SoInterpolate {
+class INVENTOR_API SoInterpolateFloat : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateFloat);
     SoMFFloat input0;
     SoMFFloat
@@ -251,7 +251,7 @@ class SoInterpolateFloat : public SoInterpolate {
 /// \endcode
 /// \sa SoEngineOutput, SoInterpolateFloat, SoInterpolateVec2f,
 /// SoInterpolateVec3f, SoInterpolateVec4f
-class SoInterpolateRotation : public SoInterpolate {
+class INVENTOR_API SoInterpolateRotation : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateRotation);
     SoMFRotation input0;
     SoMFRotation
@@ -280,7 +280,7 @@ class SoInterpolateRotation : public SoInterpolate {
 /// \endcode
 /// \sa SoEngineOutput, SoInterpolateFloat,
 /// SoInterpolateRotation,SoInterpolateVec3f, SoInterpolateVec4f
-class SoInterpolateVec2f : public SoInterpolate {
+class INVENTOR_API SoInterpolateVec2f : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateVec2f);
     SoMFVec2f input0;
     SoMFVec2f
@@ -309,7 +309,7 @@ class SoInterpolateVec2f : public SoInterpolate {
 /// \endcode
 /// \sa SoEngineOutput, SoInterpolateFloat,
 /// SoInterpolateRotation,SoInterpolateVec2f, SoInterpolateVec4f
-class SoInterpolateVec3f : public SoInterpolate {
+class INVENTOR_API SoInterpolateVec3f : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateVec3f);
     SoMFVec3f input0;
     SoMFVec3f
@@ -338,7 +338,7 @@ class SoInterpolateVec3f : public SoInterpolate {
 /// \endcode
 /// \sa SoEngineOutput, SoInterpolateFloat,
 /// SoInterpolateRotation,SoInterpolateVec2f, SoInterpolateVec3f
-class SoInterpolateVec4f : public SoInterpolate {
+class INVENTOR_API SoInterpolateVec4f : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateVec4f);
     SoMFVec4f input0;
     SoMFVec4f

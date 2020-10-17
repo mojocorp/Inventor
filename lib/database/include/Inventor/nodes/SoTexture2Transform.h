@@ -86,7 +86,7 @@
 /// }
 /// \endcode
 /// \sa SoTexture2,SoTextureCoordinate2,SoTextureCoordinateFunction
-class SoTexture2Transform : public SoNode {
+class INVENTOR_API SoTexture2Transform : public SoNode {
 
     SO_NODE_HEADER(SoTexture2Transform);
 

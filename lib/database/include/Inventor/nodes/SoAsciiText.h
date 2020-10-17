@@ -129,7 +129,7 @@ class SoTextureCoordinateElement;
 /// }
 /// \endcode
 /// \sa SoFont,SoFontStyle,SoText2,SoText3,SoTextDetail
-class SoAsciiText : public SoShape {
+class INVENTOR_API SoAsciiText : public SoShape {
 
     SO_NODE_HEADER(SoAsciiText);
 

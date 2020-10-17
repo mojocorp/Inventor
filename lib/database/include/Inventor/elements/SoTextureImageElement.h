@@ -68,7 +68,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoTextureImageElement : public SoReplacedElement {
+class INVENTOR_API SoTextureImageElement : public SoReplacedElement {
 
     SO_ELEMENT_HEADER(SoTextureImageElement);
 

@@ -120,7 +120,7 @@ class SoMField;
 /// }
 /// \endcode
 /// \sa SoEngineOutput, SoGate, SoSelectOne
-class SoConcatenate : public SoEngine {
+class INVENTOR_API SoConcatenate : public SoEngine {
 
     SO_ENGINE_HEADER(SoConcatenate);
 

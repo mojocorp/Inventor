@@ -87,7 +87,7 @@
 /// }
 /// \endcode
 /// \sa SoArray, SoSwitch
-class SoMultipleCopy : public SoGroup {
+class INVENTOR_API SoMultipleCopy : public SoGroup {
 
     SO_NODE_HEADER(SoMultipleCopy);
 

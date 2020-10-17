@@ -78,7 +78,7 @@
 /// }
 /// \endcode
 /// \sa SoCoordinate4,SoVertexShape
-class SoCoordinate3 : public SoNode {
+class INVENTOR_API SoCoordinate3 : public SoNode {
 
     SO_NODE_HEADER(SoCoordinate3);
 

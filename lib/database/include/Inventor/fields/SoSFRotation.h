@@ -70,7 +70,7 @@
 /// 0 1 0  3.14159265
 ///
 /// \sa SbRotation, SoField, SoSField, SoMFRotation
-class SoSFRotation : public SoSField {
+class INVENTOR_API SoSFRotation : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFRotation, SbRotation, const SbRotation &);
 

@@ -70,7 +70,7 @@
 /// character, and must consist entirely of underscores, alphabetic
 /// characters, or numbers.
 /// \sa SoField, SoSField, SoMFName
-class SoSFName : public SoSField {
+class INVENTOR_API SoSFName : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFName, SbName, const SbName &);

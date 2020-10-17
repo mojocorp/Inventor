@@ -90,7 +90,7 @@ class SoBaseKit;
 /// <b>section</b>
 /// SoBaseKit, SoNodeKitPath, SoDetail, SoPickedPoint
 /// \sa SoBaseKit, SoNodeKitPath, SoDetail, SoPickedPoint
-class SoNodeKitDetail : public SoDetail {
+class INVENTOR_API SoNodeKitDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoNodeKitDetail);
 

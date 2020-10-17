@@ -4,7 +4,7 @@
 
 #include <vector>
 
-class SoFontCache : public SoCache {
+class INVENTOR_API SoFontCache : public SoCache {
     // Forward declarations for freetype:
     typedef struct FT_FaceRec_ *   FT_Face;
     typedef struct FT_LibraryRec_ *FT_Library;

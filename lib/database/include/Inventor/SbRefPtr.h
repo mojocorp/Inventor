@@ -48,7 +48,7 @@ template <typename T> class SbRefPtr {
     T *p;
 };
 
-class SbRefCounted {
+class INVENTOR_API SbRefCounted {
   public:
     void ref() { refcount++; }
 

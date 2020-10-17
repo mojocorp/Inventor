@@ -80,7 +80,7 @@
 /// \sa SbCylinderPlaneProjector,SbCylinderSheetProjector,SbLineProjector,
 /// SbPlaneProjector, \sa SbSpherePlaneProjector,SbSphereProjector,
 /// SbSphereSectionProjector, SbSphereSheetProjector
-class SbCylinderSectionProjector : public SbCylinderProjector {
+class INVENTOR_API SbCylinderSectionProjector : public SbCylinderProjector {
   public:
     /// Default constructor.
     /// The default view volume is undefined.

@@ -92,7 +92,7 @@
 /// format/defaults: This is an abstract class. See the reference page of a
 /// derived class for the format and default values. \sa
 /// SoLinearProfile,SoNurbsProfile,SoNurbsSurface,SoProfileCoordinate2,SoProfileCoordinate3,SoText3
-class SoProfile : public SoNode {
+class INVENTOR_API SoProfile : public SoNode {
 
     SO_NODE_ABSTRACT_HEADER(SoProfile);
 

@@ -82,7 +82,7 @@ class SoElement;
 class SoState;
 
 SoEXTENDER
-class SoCache {
+class INVENTOR_API SoCache {
 
   public:
     /// Constructor. Takes the state in effect when the cache is used;

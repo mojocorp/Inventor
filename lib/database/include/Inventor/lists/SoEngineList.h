@@ -72,7 +72,7 @@ class SoEngine;
 /// <tt>SoEngine</tt>s.  It updates reference counts to engines in the list
 /// whenever adding or removing pointers.
 /// \sa SoEngine
-class SoEngineList : public SoBaseList {
+class INVENTOR_API SoEngineList : public SoBaseList {
   public:
     /// Constructor.
     SoEngineList() : SoBaseList() {}

@@ -94,7 +94,7 @@ class SoCallbackAction;
 /// }
 /// \endcode
 /// \sa SoLightModel, SoPickStyle, SoShapeHints
-class SoDrawStyle : public SoNode {
+class INVENTOR_API SoDrawStyle : public SoNode {
 
     SO_NODE_HEADER(SoDrawStyle);
 

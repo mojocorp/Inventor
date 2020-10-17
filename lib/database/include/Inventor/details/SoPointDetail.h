@@ -66,7 +66,7 @@
 /// information about the vertices of faces and line segments.
 /// \sa SoDetail, SoPickedPoint, SoPrimitiveVertex, SoVertexShape, SoFaceDetail,
 /// SoLineDetail
-class SoPointDetail : public SoDetail {
+class INVENTOR_API SoPointDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoPointDetail);
 

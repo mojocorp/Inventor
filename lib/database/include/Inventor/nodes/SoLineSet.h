@@ -119,7 +119,7 @@ class SoState;
 /// }
 /// \endcode
 /// \sa SoCoordinate3,SoDrawStyle,SoIndexedLineSet,SoLineDetail,SoVertexProperty
-class SoLineSet : public SoNonIndexedShape {
+class INVENTOR_API SoLineSet : public SoNonIndexedShape {
 
     SO_NODE_HEADER(SoLineSet);
 

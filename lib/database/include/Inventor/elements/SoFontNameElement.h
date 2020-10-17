@@ -67,7 +67,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoFontNameElement : public SoReplacedElement {
+class INVENTOR_API SoFontNameElement : public SoReplacedElement {
 
     SO_ELEMENT_HEADER(SoFontNameElement);
 

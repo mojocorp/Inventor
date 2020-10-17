@@ -118,7 +118,7 @@ class SoState;
 /// This is an abstract class. See the reference page of a derived class for the
 /// format and default values. \sa SoIndexedShape, SoNonIndexedShape,
 /// SoVertexProperty
-class SoVertexShape : public SoShape {
+class INVENTOR_API SoVertexShape : public SoShape {
 
     SO_NODE_ABSTRACT_HEADER(SoVertexShape);
 

@@ -77,7 +77,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoGLUpdateAreaElement : public SoElement {
+class INVENTOR_API SoGLUpdateAreaElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoGLUpdateAreaElement);
 

@@ -72,7 +72,7 @@ class SbMatrix;
 /// \par Notes:
 /// Rotations are stored internally as quaternions.
 /// \sa SbVec3f, SbMatrix
-class SbRotation {
+class INVENTOR_API SbRotation {
   public:
     /// Default constructor
     SbRotation() {}
@@ -138,10 +138,12 @@ class SbRotation {
     SbRotation &operator*=(const SbRotation &q);
 
     /// Equality comparison operator
-    friend int operator==(const SbRotation &q1, const SbRotation &q2);
+    friend INVENTOR_API int operator==(const SbRotation &q1,
+                                       const SbRotation &q2);
 
     /// Inequality comparison operator
-    friend int operator!=(const SbRotation &q1, const SbRotation &q2) {
+    friend INVENTOR_API int operator!=(const SbRotation &q1,
+                                       const SbRotation &q2) {
         return !(q1 == q2);
     }
 
@@ -150,7 +152,8 @@ class SbRotation {
     SbBool equals(const SbRotation &r, float tolerance) const;
 
     /// Multiplication of two rotations; results in product of rotations
-    friend SbRotation operator*(const SbRotation &q1, const SbRotation &q2);
+    friend INVENTOR_API SbRotation operator*(const SbRotation &q1,
+                                             const SbRotation &q2);
 
     /// Puts the given vector through this rotation
     /// (Multiplies the given vector by the matrix of this rotation),.
@@ -177,4 +180,3 @@ class SbRotation {
     // Normalizes a rotation quaternion to unit 4D length
     void normalize();
 };
-

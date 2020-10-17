@@ -3,7 +3,7 @@
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbString.h>
 
-class SbFile {
+class INVENTOR_API SbFile {
   public:
     /// Constructs a new file object.
     SbFile();

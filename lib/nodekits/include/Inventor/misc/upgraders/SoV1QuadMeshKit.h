@@ -91,7 +91,7 @@
 ////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoV1QuadMeshKit : public SoV1VertexShapeKit {
+class INVENTOR_API SoV1QuadMeshKit : public SoV1VertexShapeKit {
 
     // Define typeId and name stuff
     SO_NODE_HEADER(SoV1QuadMeshKit);

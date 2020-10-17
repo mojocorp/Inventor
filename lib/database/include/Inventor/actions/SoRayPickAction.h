@@ -85,7 +85,7 @@
 /// <tt>SoPickedPoint</tt> in the list. The <tt>SoPickedPoint</tt> class
 /// provides methods to get the intersection point, normal, and other info. \sa
 /// SoPickedPoint, SoPickedPointList
-class SoRayPickAction : public SoPickAction {
+class INVENTOR_API SoRayPickAction : public SoPickAction {
 
     SO_ACTION_HEADER(SoRayPickAction);
 

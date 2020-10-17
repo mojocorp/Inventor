@@ -83,7 +83,7 @@
 /// }
 /// \endcode
 /// \sa SoCoordinate3, SoLightModel, SoNormalBinding, SoVertexShape
-class SoNormal : public SoNode {
+class INVENTOR_API SoNormal : public SoNode {
 
     SO_NODE_HEADER(SoNormal);
 

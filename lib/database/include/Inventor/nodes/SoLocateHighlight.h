@@ -108,7 +108,7 @@ class SoColorPacker;
 /// }
 /// \endcode
 /// \sa SoSeparator, SoSelection, SoMaterial
-class SoLocateHighlight : public SoSeparator {
+class INVENTOR_API SoLocateHighlight : public SoSeparator {
 
     SO_NODE_HEADER(SoLocateHighlight);
 

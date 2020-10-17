@@ -96,7 +96,7 @@ class SoTempPath;
 /// may provide other ways to get more information, such as by using the
 /// <tt>SoNodeKitPath</tt> class.
 /// \sa SoNode, SoRayPickAction, SoSearchAction, SoNodeKitPath
-class SoPath : public SoBase {
+class INVENTOR_API SoPath : public SoBase {
 
   public:
     /// Constructs an empty path.
@@ -181,7 +181,7 @@ class SoPath : public SoBase {
     SoPath *copy(int startFromNodeIndex = 0, int numNodes = 0) const;
 
     /// Returns TRUE if all node pointers in the two path chains are identical.
-    friend int operator==(const SoPath &p1, const SoPath &p2);
+    friend INVENTOR_API int operator==(const SoPath &p1, const SoPath &p2);
 
     /// Returns type identifier for path instance
     virtual SoType getTypeId() const;
@@ -276,7 +276,7 @@ class SoPath : public SoBase {
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoFullPath : public SoPath {
+class INVENTOR_API SoFullPath : public SoPath {
 
   public:
     //
@@ -317,7 +317,7 @@ class SoFullPath : public SoPath {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class SoLightPath {
+class INVENTOR_API SoLightPath {
 
     SoINTERNAL
   public:
@@ -363,4 +363,3 @@ class SoLightPath {
 
     friend class SoAction;
 };
-

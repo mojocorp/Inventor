@@ -65,7 +65,7 @@
 /// value, represented as decimal, hexadecimal (beginning with '0x') or
 /// octal (beginning with '0') value.
 /// \sa SoField, SoSField, SoMFShort, SoSFUShort, SoSFInt32
-class SoSFShort : public SoSField {
+class INVENTOR_API SoSFShort : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFShort, short, short);

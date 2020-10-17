@@ -76,7 +76,7 @@
 /// downwards from it as other actions (such as rendering) do. This
 /// behavior makes the most sense for this action.
 /// \sa SoGetBoundingBoxAction
-class SoGetMatrixAction : public SoAction {
+class INVENTOR_API SoGetMatrixAction : public SoAction {
 
     SO_ACTION_HEADER(SoGetMatrixAction);
 

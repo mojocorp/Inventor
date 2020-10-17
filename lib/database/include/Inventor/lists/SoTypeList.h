@@ -69,7 +69,7 @@
 /// \ingroup General
 /// This subclass of <tt>SbPList</tt> holds lists of <tt>SoType</tt> type
 /// identifiers. \sa SoType
-class SoTypeList : public SbPList {
+class INVENTOR_API SoTypeList : public SbPList {
   public:
     /// Constructor.
     SoTypeList() : SbPList() {}

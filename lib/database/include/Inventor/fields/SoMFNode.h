@@ -70,7 +70,7 @@ class SoNode;
 /// example:
 ///
 /// [ Cube { }, Sphere { radius 2.0 }, USE myTranslation ]
-class SoMFNode : public SoMField {
+class INVENTOR_API SoMFNode : public SoMField {
 
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFNode, SoNode *, SoNode *);

@@ -67,7 +67,7 @@ class SoInput;
 /// <tt>SoReadError</tt>  is used for errors reported
 /// while reading Inventor data files.
 /// \sa SoDebugError,SoMemoryError
-class SoReadError : public SoError {
+class INVENTOR_API SoReadError : public SoError {
 
   public:
     /// Sets handler callback for SoReadError class

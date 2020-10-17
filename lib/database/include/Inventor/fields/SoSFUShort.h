@@ -64,7 +64,7 @@
 /// <tt>SoSFUShorts</tt> are written to file in decimal, hexadecimal (beginning
 /// with '0x') or octal (beginning with '0') values.
 /// \sa SoField, SoSField, SoMFUShort
-class SoSFUShort : public SoSField {
+class INVENTOR_API SoSFUShort : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFUShort, unsigned short, unsigned short);

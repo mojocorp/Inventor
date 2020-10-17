@@ -77,7 +77,7 @@
 /// \sa SbLineProjector, SbPlaneProjector,
 /// SbSpherePlaneProjector,SbSphereProjector, SbSphereSectionProjector,
 /// SbSphereSheetProjector
-class SbCylinderProjector : public SbProjector {
+class INVENTOR_API SbCylinderProjector : public SbProjector {
   public:
     /// Destructor
     virtual ~SbCylinderProjector(){};

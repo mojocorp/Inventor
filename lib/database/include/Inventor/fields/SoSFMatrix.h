@@ -69,7 +69,7 @@
 /// 1 0 0 0  0 1 0 0  0 0 1 0  0 0 0 1
 ///
 /// \sa SoField, SoSField, SoMFMatrix, SbMatrix
-class SoSFMatrix : public SoSField {
+class INVENTOR_API SoSFMatrix : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFMatrix, SbMatrix, const SbMatrix &);

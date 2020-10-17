@@ -68,7 +68,7 @@
 /// SoLocation2Event,SoMouseButtonEvent, \sa
 /// SoSpaceballButtonEvent,SoHandleEventAction, SoEventCallback, SoSelection,
 /// SoInteraction,SoXtDevice
-class SoMotion3Event : public SoEvent {
+class INVENTOR_API SoMotion3Event : public SoEvent {
 
     SO_EVENT_HEADER();
 

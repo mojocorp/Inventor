@@ -66,7 +66,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoComplexityElement : public SoFloatElement {
+class INVENTOR_API SoComplexityElement : public SoFloatElement {
 
     SO_ELEMENT_HEADER(SoComplexityElement);
 

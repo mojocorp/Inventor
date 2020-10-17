@@ -74,7 +74,7 @@ class SbImage;
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoGLTextureImageElement : public SoTextureImageElement {
+class INVENTOR_API SoGLTextureImageElement : public SoTextureImageElement {
 
     SO_ELEMENT_HEADER(SoGLTextureImageElement);
 

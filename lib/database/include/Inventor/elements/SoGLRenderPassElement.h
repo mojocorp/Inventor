@@ -68,7 +68,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoGLRenderPassElement : public SoElement {
+class INVENTOR_API SoGLRenderPassElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoGLRenderPassElement);
 

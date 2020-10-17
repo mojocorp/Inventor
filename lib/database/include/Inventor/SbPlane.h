@@ -70,7 +70,7 @@ class SbMatrix;
 /// Represents an oriented plane in 3D. This is a lightweight
 /// class/datatype that is used for arguments to some Inventor objects.
 /// \sa SbVec3f, SbLine
-class SbPlane {
+class INVENTOR_API SbPlane {
   public:
     SbPlane() {}
 
@@ -108,10 +108,10 @@ class SbPlane {
     float getDistanceFromOrigin() const { return distance; }
 
     /// Equality comparison operators
-    friend int operator==(const SbPlane &p1, const SbPlane &p2);
+    friend INVENTOR_API int operator==(const SbPlane &p1, const SbPlane &p2);
 
     /// Inequality comparison operators
-    friend int operator!=(const SbPlane &p1, const SbPlane &p2) {
+    friend INVENTOR_API int operator!=(const SbPlane &p1, const SbPlane &p2) {
         return !(p1 == p2);
     }
 
@@ -124,4 +124,3 @@ class SbPlane {
     // Distance from origin to plane: distance * normalVec is on the plane
     float distance;
 };
-

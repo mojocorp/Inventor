@@ -69,7 +69,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoBundle {
+class INVENTOR_API SoBundle {
 
   protected:
     SoState *state; // Stores state for any bundle

@@ -105,7 +105,7 @@ typedef void *SoOutputReallocCB(void *ptr, size_t newSize);
 /// contained in an <tt>SoWriteAction</tt>; this is typically the only instance
 /// needed.
 /// \sa SoInput, SoWriteAction, SoTranSender
-class SoOutput {
+class INVENTOR_API SoOutput {
   public:
     /// Enum that determines formats for writing
     enum Format { ASCII, UTF8, BINARY };

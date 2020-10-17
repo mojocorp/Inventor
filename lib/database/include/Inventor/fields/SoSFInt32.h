@@ -65,7 +65,7 @@
 /// hexadecimal (beginning with '0x') or octal (beginning with '0')
 /// format.
 /// \sa SoField, SoSField, SoMFInt32, SoSFUInt32
-class SoSFInt32 : public SoSField {
+class INVENTOR_API SoSFInt32 : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFInt32, int32_t, int32_t);

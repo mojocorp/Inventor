@@ -80,7 +80,7 @@
 ///
 /// When more than one value is present, all of the values are enclosed in
 /// square brackets and separated by commas.
-class SoMFEnum : public SoMField {
+class INVENTOR_API SoMFEnum : public SoMField {
 
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFEnum, int, int);

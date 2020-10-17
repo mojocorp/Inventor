@@ -87,7 +87,7 @@
 ////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoV1CylinderKit : public SoV1ShapeKit {
+class INVENTOR_API SoV1CylinderKit : public SoV1ShapeKit {
 
     // Define typeId and name stuff
     SO_NODE_HEADER(SoV1CylinderKit);

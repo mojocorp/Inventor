@@ -68,7 +68,7 @@ class SoFieldContainer;
 /// whenever the field changes.  The field may be part of a node, an input
 /// of an engine, or a global field.
 /// \sa SoNodeSensor, SoPathSensor, SoDataSensor
-class SoFieldSensor : public SoDataSensor {
+class INVENTOR_API SoFieldSensor : public SoDataSensor {
 
   public:
     /// Constructor.

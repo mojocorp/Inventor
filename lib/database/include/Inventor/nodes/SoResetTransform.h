@@ -89,7 +89,7 @@
 /// }
 /// \endcode
 /// \sa SoTransform
-class SoResetTransform : public SoTransformation {
+class INVENTOR_API SoResetTransform : public SoTransformation {
 
     SO_NODE_HEADER(SoResetTransform);
 

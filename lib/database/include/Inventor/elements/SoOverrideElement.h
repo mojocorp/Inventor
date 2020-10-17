@@ -90,7 +90,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoOverrideElement : public SoElement {
+class INVENTOR_API SoOverrideElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoOverrideElement);
 

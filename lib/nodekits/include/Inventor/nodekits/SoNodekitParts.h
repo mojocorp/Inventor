@@ -76,7 +76,7 @@ class SoSFNode;
 //    Class: SoNodekitParts
 ////////////////////////////////////////////////////////////////////
 SoEXTENDER
-class SoNodekitParts {
+class INVENTOR_API SoNodekitParts {
 
     SoEXTENDER
   public:

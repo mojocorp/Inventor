@@ -73,7 +73,7 @@ typedef void SoCallbackListCB(void *userData, void *callbackData);
 /// When the callback is invoked, it is passed this user data, along with
 /// callback data specified by the invoking routine.  The type of this
 /// callback data is determined by the invoking routine.
-class SoCallbackList {
+class INVENTOR_API SoCallbackList {
 
   public:
     /// Default constructor

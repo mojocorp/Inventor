@@ -79,7 +79,7 @@
 /// }
 /// \endcode
 /// \sa SoAsciiText,SoFont,SoText2,SoText3
-class SoFontStyle : public SoFont {
+class INVENTOR_API SoFontStyle : public SoFont {
 
     SO_NODE_HEADER(SoFontStyle);
 

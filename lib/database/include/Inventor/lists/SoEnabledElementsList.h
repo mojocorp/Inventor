@@ -69,7 +69,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoINTERNAL
-class SoEnabledElementsList {
+class INVENTOR_API SoEnabledElementsList {
 
   public:
     /// Constructor

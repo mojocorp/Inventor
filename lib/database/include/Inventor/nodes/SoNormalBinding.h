@@ -82,7 +82,7 @@
 /// }
 /// \endcode
 /// \sa SoMaterialBinding,SoNormal,SoTextureCoordinateBinding,SoVertexShape
-class SoNormalBinding : public SoNode {
+class INVENTOR_API SoNormalBinding : public SoNode {
 
     SO_NODE_HEADER(SoNormalBinding);
 

@@ -77,7 +77,7 @@ class SbVec2f;
 /// projection, the view volume is a frustum. For orthographic (parallel)
 /// projection, the view volume is a rectangular prism. \sa SbVec3f, SbVec2f,
 /// SbBox3f, SbMatrix, SbRotation
-class SbViewVolume {
+class INVENTOR_API SbViewVolume {
   public:
     /// Default constructor
     SbViewVolume();

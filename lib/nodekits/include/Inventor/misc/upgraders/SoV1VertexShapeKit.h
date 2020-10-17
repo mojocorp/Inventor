@@ -92,7 +92,7 @@
 ////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoV1VertexShapeKit : public SoV1ShapeKit {
+class INVENTOR_API SoV1VertexShapeKit : public SoV1ShapeKit {
 
     // Define typeId and name stuff
     SO_NODE_HEADER(SoV1VertexShapeKit);

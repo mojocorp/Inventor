@@ -71,7 +71,7 @@ class SoEngineOutput;
 /// This subclass of <tt>SbPlist</tt> holds lists of pointers to
 /// <tt>SoEngineOutput</tt>s.  It updates reference counts to engine outputs in
 /// the list whenever adding or removing pointers. \sa SoEngineOutput
-class SoEngineOutputList : public SbPList {
+class INVENTOR_API SoEngineOutputList : public SbPList {
   public:
     /// Constructor.
     SoEngineOutputList() : SbPList() {}

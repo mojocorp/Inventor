@@ -117,7 +117,7 @@ class SoGLDisplayList;
 /// \endcode
 /// \sa
 /// SoComplexity,SoMaterial,SoTexture2Transform,SoTextureCoordinate2,SoTextureCoordinateBinding,SoTextureCoordinateFunction
-class SoTexture2 : public SoNode {
+class INVENTOR_API SoTexture2 : public SoNode {
 
     SO_NODE_HEADER(SoTexture2);
 

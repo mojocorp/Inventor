@@ -163,7 +163,7 @@
 /// \endcode
 /// \sa
 /// SoAppearanceKit,SoBaseKit,SoCameraKit,SoLightKit,SoNodeKit,SoNodeKitDetail,SoNodeKitListPart,SoNodeKitPath,SoNodekitCatalog,SoSceneKit,SoShapeKit,SoWrapperKit
-class SoSeparatorKit : public SoBaseKit {
+class INVENTOR_API SoSeparatorKit : public SoBaseKit {
 
     SO_KIT_HEADER(SoSeparatorKit);
 

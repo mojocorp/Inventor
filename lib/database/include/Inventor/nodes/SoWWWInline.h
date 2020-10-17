@@ -96,7 +96,7 @@ typedef void SoWWWInlineFetchURLCB(const SbString &url, void *userData,
 /// }
 /// \endcode
 /// \sa SoWWWAnchor, SoFile
-class SoWWWInline : public SoNode {
+class INVENTOR_API SoWWWInline : public SoNode {
 
     SO_NODE_HEADER(SoWWWInline);
 

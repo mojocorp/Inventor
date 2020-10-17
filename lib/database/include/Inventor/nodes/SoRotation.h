@@ -78,7 +78,7 @@
 /// }
 /// \endcode
 /// \sa SoRotationXYZ, SoTransform
-class SoRotation : public SoTransformation {
+class INVENTOR_API SoRotation : public SoTransformation {
 
     SO_NODE_HEADER(SoRotation);
 

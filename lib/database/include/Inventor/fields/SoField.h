@@ -161,7 +161,7 @@ class SoOutput;
 /// }
 /// \endcode
 /// \sa SoSField, SoMField, SoNode, SoDB
-class SoField {
+class INVENTOR_API SoField {
   public:
     /// Destructor
     virtual ~SoField();
@@ -506,7 +506,7 @@ class SoField {
 /// either in place of the value (if the actual value is the default)
 /// or after it (otherwise).
 /// \sa SoField, SoMField
-class SoSField : public SoField {
+class INVENTOR_API SoSField : public SoField {
   public:
     /// Destructor
     virtual ~SoSField();
@@ -579,7 +579,7 @@ class SoSField : public SoField {
 ///    or:
 /// [ 1, 2, 3, 4, ]
 /// \sa SoNode, SoEngine
-class SoMField : public SoField {
+class INVENTOR_API SoMField : public SoField {
 
   public:
     /// Destructor

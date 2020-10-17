@@ -5,7 +5,7 @@
 #include <Inventor/SbVec.h>
 #include <Inventor/SbRefPtr.h>
 
-class SbImage {
+class INVENTOR_API SbImage {
   public:
     enum Format {
         Format_Invalid,

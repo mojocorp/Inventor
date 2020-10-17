@@ -85,7 +85,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoINTERNAL
-class SoAuditorList : private SbPList {
+class INVENTOR_API SoAuditorList : private SbPList {
   public:
     /// Constructor and destructor.
     SoAuditorList();

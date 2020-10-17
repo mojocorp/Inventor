@@ -71,7 +71,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoBoundingBoxCache : public SoCache {
+class INVENTOR_API SoBoundingBoxCache : public SoCache {
 
   public:
     /// Constructor and destructor

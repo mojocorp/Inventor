@@ -84,7 +84,7 @@
 class SoPathList;
 
 SoINTERNAL
-class SoCompactPathList {
+class INVENTOR_API SoCompactPathList {
 
   public:
     /// Constructor given path list

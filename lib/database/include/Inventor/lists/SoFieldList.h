@@ -84,7 +84,7 @@ class SoField;
 /// This subclass of <tt>SbPList</tt> holds lists of pointers to
 /// instances of classes derived from <tt>SoField</tt>.
 /// \sa SoField
-class SoFieldList : public SbPList {
+class INVENTOR_API SoFieldList : public SbPList {
   public:
     /// Constructor.
     SoFieldList() : SbPList() {}

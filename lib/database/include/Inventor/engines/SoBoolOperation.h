@@ -82,7 +82,7 @@
 /// }
 /// \endcode
 /// \sa SoEngineOutput, SoCalculator
-class SoBoolOperation : public SoEngine {
+class INVENTOR_API SoBoolOperation : public SoEngine {
 
     SO_ENGINE_HEADER(SoBoolOperation);
 

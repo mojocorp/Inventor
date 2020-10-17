@@ -67,7 +67,7 @@
 /// \sa
 /// SbCylinderSheetProjector,SbPlaneProjector,SbSpherePlaneProjector,SbSphereProjector,
 /// SbSphereSectionProjector, SbSphereSheetProjector
-class SbLineProjector : public SbProjector {
+class INVENTOR_API SbLineProjector : public SbProjector {
   public:
     /// Constructor
     /// The default line passes through the origin and is

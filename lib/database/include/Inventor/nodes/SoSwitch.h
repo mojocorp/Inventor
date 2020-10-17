@@ -95,7 +95,7 @@
 /// }
 /// \endcode
 /// \sa SoArray, SoLevelOfDetail, SoMultipleCopy, SoPathSwitch
-class SoSwitch : public SoGroup {
+class INVENTOR_API SoSwitch : public SoGroup {
 
     SO_NODE_HEADER(SoSwitch);
 

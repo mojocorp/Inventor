@@ -86,7 +86,7 @@
 /// }
 /// \endcode
 /// \sa SoRotor, SoShuttle
-class SoPendulum : public SoRotation {
+class INVENTOR_API SoPendulum : public SoRotation {
 
     SO_NODE_HEADER(SoPendulum);
 

@@ -92,7 +92,7 @@ typedef void SoSensorCB(void *data, SoSensor *sensor);
 /// callback function.
 /// \sa SoAlarmSensor, SoDataSensor, SoFieldSensor, SoIdleSensor,SoNodeSensor,
 /// SoPathSensor, SoSensorManager
-class SoSensor {
+class INVENTOR_API SoSensor {
 
   public:
     /// Constructor.

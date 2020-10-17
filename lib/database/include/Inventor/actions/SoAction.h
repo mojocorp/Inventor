@@ -79,7 +79,7 @@ class SoTempPath;
 /// SoNode,SoPath,SoPathList,SoCallbackAction,SoGLRenderAction,SoGetBoundingBoxAction,
 /// \sa
 /// SoGetMatrixAction,SoHandleEventAction,SoPickAction,SoRayPickAction,SoSearchAction,SoWriteAction
-class SoAction {
+class INVENTOR_API SoAction {
 
   public:
     /// Destructor

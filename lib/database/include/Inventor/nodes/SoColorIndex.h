@@ -81,7 +81,7 @@
 /// }
 /// \endcode
 /// \sa SoBaseColor, SoLightModel
-class SoColorIndex : public SoNode {
+class INVENTOR_API SoColorIndex : public SoNode {
 
     SO_NODE_HEADER(SoColorIndex);
 

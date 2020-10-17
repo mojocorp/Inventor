@@ -71,7 +71,7 @@
 /// - 4 Top
 /// - 5 Bottom
 /// \sa SoCube, SoDetail, SoPickedPoint, SoPrimitiveVertex
-class SoCubeDetail : public SoDetail {
+class INVENTOR_API SoCubeDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoCubeDetail);
 

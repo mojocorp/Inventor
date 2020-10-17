@@ -71,7 +71,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoEnvironmentElement : public SoReplacedElement {
+class INVENTOR_API SoEnvironmentElement : public SoReplacedElement {
     SO_ELEMENT_HEADER(SoEnvironmentElement);
 
   public:

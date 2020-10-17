@@ -81,7 +81,7 @@
 /// A priority 0 one-shot sensor isn't very useful, since scheduling it is
 /// exactly the same as directly calling its callback function.
 /// \sa SoIdleSensor, SoDelayQueueSensor
-class SoOneShotSensor : public SoDelayQueueSensor {
+class INVENTOR_API SoOneShotSensor : public SoDelayQueueSensor {
 
   public:
     /// Constructor.

@@ -74,7 +74,7 @@
 ///
 /// [ 0 0 0, 1.2 3.4 5.6, 98.6 -4e1 212 ]
 ///
-class SoMFVec3f : public SoMField {
+class INVENTOR_API SoMFVec3f : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFVec3f, SbVec3f, const SbVec3f &);
 

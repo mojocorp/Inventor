@@ -207,7 +207,7 @@ class SoFieldSensor;
 /// \endcode
 /// \sa
 /// SoInteractionKit,SoDragger,SoCenterballDragger,SoDragPointDragger,SoHandleBoxDragger,SoJackDragger,SoPointLightDragger,SoRotateCylindricalDragger,SoRotateDiscDragger,SoRotateSphericalDragger,SoScale1Dragger,SoScale2Dragger,SoScale2UniformDragger,SoScaleUniformDragger,SoSpotLightDragger,SoTabBoxDragger,SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,SoTransformerDragger,SoTranslate1Dragger,SoTranslate2Dragger
-class SoDirectionalLightDragger : public SoDragger {
+class INVENTOR_API SoDirectionalLightDragger : public SoDragger {
 
     SO_KIT_HEADER(SoDirectionalLightDragger);
 

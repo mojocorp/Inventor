@@ -90,7 +90,7 @@
 //
 ////////////////////////////////////////////////////////////
 SoEXTENDER
-class SoV1WrapperKit : public SoV1GroupKit {
+class INVENTOR_API SoV1WrapperKit : public SoV1GroupKit {
 
     // Define typeId and name stuff
     SO_NODE_HEADER(SoV1WrapperKit);

@@ -64,7 +64,7 @@
 /// (<tt>SoText2</tt> or <tt>SoText3</tt>). It contains the part of the text,
 /// string, and character that were hit or generated. \sa SoText2, SoText3,
 /// SoDetail, SoPickedPoint, SoPrimitiveVertex
-class SoTextDetail : public SoDetail {
+class INVENTOR_API SoTextDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoTextDetail);
 

@@ -73,7 +73,7 @@
 /// node or engine containing an <tt>SoSFTrigger</tt> field will write only the
 /// field's name.
 /// \sa SoSFBool, SoMFBool
-class SoSFTrigger : public SoSField {
+class INVENTOR_API SoSFTrigger : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_REQUIRED_HEADER(SoSFTrigger);

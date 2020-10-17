@@ -229,7 +229,7 @@ class SoTimerSensor;
 /// \sa
 /// SoSpotLightDragger,SoTabBoxDragger,SoTabPlaneDragger,SoTransformBoxDragger,
 /// \sa SoTransformerDragger,SoTranslate1Dragger,SoTranslate2Dragger
-class SoTrackballDragger : public SoDragger {
+class INVENTOR_API SoTrackballDragger : public SoDragger {
 
     SO_KIT_HEADER(SoTrackballDragger);
 

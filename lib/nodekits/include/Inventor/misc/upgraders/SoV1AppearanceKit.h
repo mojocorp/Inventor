@@ -83,7 +83,7 @@
 class SoNodeList;
 
 SoEXTENDER
-class SoV1AppearanceKit : public SoV1BaseKit {
+class INVENTOR_API SoV1AppearanceKit : public SoV1BaseKit {
 
     // Define typeId and name stuff
     SO_NODE_HEADER(SoV1AppearanceKit);

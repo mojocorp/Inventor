@@ -102,7 +102,7 @@ class SoGroup;
 /// }
 /// \endcode
 /// \sa SoInput, SoPath
-class SoFile : public SoNode {
+class INVENTOR_API SoFile : public SoNode {
 
     SO_NODE_HEADER(SoFile);
 

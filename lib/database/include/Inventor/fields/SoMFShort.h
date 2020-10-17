@@ -70,7 +70,7 @@
 /// example:
 ///
 /// [ -7, 0xFF, -033 ]
-class SoMFShort : public SoMField {
+class INVENTOR_API SoMFShort : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFShort, short, short);
 

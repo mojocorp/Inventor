@@ -66,7 +66,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class SoV1CustomNode : public SoUpgrader {
+class INVENTOR_API SoV1CustomNode : public SoUpgrader {
 
     SO_NODE_HEADER(SoV1CustomNode);
 

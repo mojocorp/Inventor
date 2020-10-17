@@ -74,7 +74,7 @@
 class SbString;
 
 SoEXTENDER
-class SbStringList : public SbPList {
+class INVENTOR_API SbStringList : public SbPList {
   public:
     void append(SbString *string) { ((SbPList *)this)->append((void *)string); }
 

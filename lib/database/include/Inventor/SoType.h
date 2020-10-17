@@ -88,7 +88,7 @@ struct SoTypeData;
 /// Note that the names associated with types of Inventor classes do not
 /// contain the "So" prefix.
 /// \sa SoAction, SoBase, SoDetail, SoError, SoEvent, SoField
-class SoType {
+class INVENTOR_API SoType {
   public:
     /// Returns the type associated with the given name.
     static SoType fromName(const SbName &name);

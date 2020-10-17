@@ -104,7 +104,7 @@
 /// \endcode
 /// \sa
 /// SoTransformerDragger,SoTransform,SoCenterballManip,SoHandleBoxManip,SoJackManip,SoTabBoxManip,SoTrackballManip,SoTransformBoxManip,SoTransformManip
-class SoTransformerManip : public SoTransformManip {
+class INVENTOR_API SoTransformerManip : public SoTransformManip {
 
     SO_NODE_HEADER(SoTransformerManip);
 

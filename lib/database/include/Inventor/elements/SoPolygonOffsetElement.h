@@ -69,7 +69,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoPolygonOffsetElement : public SoReplacedElement {
+class INVENTOR_API SoPolygonOffsetElement : public SoReplacedElement {
     SO_ELEMENT_HEADER(SoPolygonOffsetElement);
 
   public:

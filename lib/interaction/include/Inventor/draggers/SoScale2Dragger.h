@@ -165,7 +165,7 @@ class SoFieldSensor;
 /// \sa
 /// SoTabBoxDragger,SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,
 /// \sa SoTransformerDragger,SoTranslate1Dragger,SoTranslate2Dragger
-class SoScale2Dragger : public SoDragger {
+class INVENTOR_API SoScale2Dragger : public SoDragger {
     SO_KIT_HEADER(SoScale2Dragger);
 
     SO_KIT_CATALOG_ENTRY_HEADER(scalerSwitch);

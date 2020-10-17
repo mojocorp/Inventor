@@ -63,7 +63,7 @@
 /// is a floating-point number between 0.0 and 1.0. There are routines to
 /// convert back and forth between RGB and HSV.
 /// \sa SbVec3f
-class SbColor : public SbVec3f {
+class INVENTOR_API SbColor : public SbVec3f {
   public:
     /// Default constructor
     SbColor();

@@ -69,7 +69,7 @@
 /// format and default values. \sa
 /// SoAntiSquish,SoMatrixTransform,SoResetTransform,SoRotation,SoRotationXYZ,SoScale,SoSurroundScale,
 /// \sa SoTransform,SoTransformManip,SoTransformSeparator,SoTranslationSoUnits
-class SoTransformation : public SoNode {
+class INVENTOR_API SoTransformation : public SoNode {
 
     SO_NODE_HEADER(SoTransformation);
 

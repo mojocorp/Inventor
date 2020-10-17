@@ -86,7 +86,7 @@
 /// \endcode
 /// \sa
 /// SoCoordinate4,SoIndexedNurbsCurve,SoIndexedNurbsSurface,SoNurbsCurve,SoNurbsProfile,SoNurbsSurface,SoVertexShape
-class SoCoordinate4 : public SoNode {
+class INVENTOR_API SoCoordinate4 : public SoNode {
 
     SO_NODE_HEADER(SoCoordinate4);
 

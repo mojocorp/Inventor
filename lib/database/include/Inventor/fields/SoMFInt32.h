@@ -68,7 +68,7 @@
 /// separated by commas; for example:
 ///
 /// [ 17, -0xE20, -518820 ]
-class SoMFInt32 : public SoMField {
+class INVENTOR_API SoMFInt32 : public SoMField {
 
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFInt32, int32_t, int32_t);

@@ -71,7 +71,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoGLPointSizeElement : public SoPointSizeElement {
+class INVENTOR_API SoGLPointSizeElement : public SoPointSizeElement {
 
     SO_ELEMENT_HEADER(SoGLPointSizeElement);
 

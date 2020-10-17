@@ -76,7 +76,7 @@
 //
 ////////////////////////////////////////////////////////////////////
 SoINTERNAL
-class SoNodekitCatalogEntry {
+class INVENTOR_API SoNodekitCatalogEntry {
   private:
     SbName name;                  // Reference name of this entry
     SoType type;                  // Type of node allowable for setting
@@ -179,7 +179,7 @@ class SoNodekitCatalogEntry {
 /// parts in the catalog are described relative to "this."
 /// \sa
 /// SoAppearanceKit,SoBaseKit,SoCameraKit,SoLightKit,SoNodeKit,SoNodeKitDetail,SoNodeKitListPart,SoNodeKitPath,SoSceneKit,SoSeparatorKit,SoShapeKit,SoWrapperKit
-class SoNodekitCatalog {
+class INVENTOR_API SoNodekitCatalog {
 
   public:
     /// initializes static variables.

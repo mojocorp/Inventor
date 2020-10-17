@@ -53,7 +53,7 @@
 
 #include <Inventor/elements/SoDepthBufferElement.h>
 
-class SoGLDepthBufferElement : public SoDepthBufferElement {
+class INVENTOR_API SoGLDepthBufferElement : public SoDepthBufferElement {
 
     SO_ELEMENT_HEADER(SoGLDepthBufferElement);
 

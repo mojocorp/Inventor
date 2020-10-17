@@ -87,7 +87,7 @@ class SbViewportRegion;
 /// This is an abstract class. See the reference page of a derived class for the
 /// format and default values. \sa SoOrthographicCamera, SoPerspectiveCamera,
 /// SoCameraKit
-class SoCamera : public SoNode {
+class INVENTOR_API SoCamera : public SoNode {
 
     SO_NODE_ABSTRACT_HEADER(SoCamera);
 

@@ -102,7 +102,7 @@
 /// the bottom right pixel green, the two middle rows of pixels black, the top
 /// left pixel white, and the top right pixel yellow.
 /// \sa SoField, SoSField
-class SoSFImage : public SoSField {
+class INVENTOR_API SoSFImage : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFImage, SbImage, const SbImage &);
 

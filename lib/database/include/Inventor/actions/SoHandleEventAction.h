@@ -80,7 +80,7 @@ class SoEvent;
 /// done so, all events will be sent directly to that node, with no
 /// traversal taking place, until the node releases the grab.
 /// \sa SoEvent, SoPickedPoint, SoRayPickAction
-class SoHandleEventAction : public SoAction {
+class INVENTOR_API SoHandleEventAction : public SoAction {
 
     SO_ACTION_HEADER(SoHandleEventAction);
 

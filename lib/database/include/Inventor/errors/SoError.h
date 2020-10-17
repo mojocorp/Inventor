@@ -100,7 +100,7 @@ typedef void SoErrorCB(const SoError *error, void *data);
 /// debugging, you can set a breakpoint on this method to stop right
 /// before an error is handled.
 /// \sa SoDebugError,SoMemoryError,SoReadError
-class SoError {
+class INVENTOR_API SoError {
 
   public:
     /// Sets handler callback for SoError class

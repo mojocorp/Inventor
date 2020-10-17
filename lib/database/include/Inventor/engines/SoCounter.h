@@ -100,7 +100,7 @@
 /// }
 /// \endcode
 /// \sa SoTimeCounter, SoEngineOutput
-class SoCounter : public SoEngine {
+class INVENTOR_API SoCounter : public SoEngine {
 
     SO_ENGINE_HEADER(SoCounter);
 

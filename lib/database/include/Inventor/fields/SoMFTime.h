@@ -72,7 +72,7 @@
 ///
 /// [ 1.0, 1345600.1200055, 99.8 ]
 /// \sa SbTime
-class SoMFTime : public SoMField {
+class INVENTOR_API SoMFTime : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFTime, SbTime, const SbTime &);
 

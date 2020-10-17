@@ -113,7 +113,7 @@ typedef SoPath *SoSelectionPickCB(void *userData, const SoPickedPoint *pick);
 /// \endcode
 /// \sa SoEventCallback, SoXtRenderArea,SoBoxHighlightRenderAction,
 /// SoLineHighlightRenderAction
-class SoSelection : public SoSeparator {
+class INVENTOR_API SoSelection : public SoSeparator {
 
     SO_NODE_HEADER(SoSelection);
 

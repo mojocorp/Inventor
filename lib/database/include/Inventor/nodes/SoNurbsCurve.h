@@ -110,7 +110,7 @@ class GLUnurbs;
 /// }
 /// \endcode
 /// \sa SoIndexedNurbsCurve, SoNurbsSurface
-class SoNurbsCurve : public SoShape {
+class INVENTOR_API SoNurbsCurve : public SoShape {
 
     SO_NODE_HEADER(SoNurbsCurve);
 

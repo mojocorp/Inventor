@@ -79,7 +79,7 @@
 /// specific nodes or engines
 /// for the names (e.g. <tt>SoDrawStyle</tt>).
 /// \sa SoField, SoSField, SoMFEnum
-class SoSFEnum : public SoSField {
+class INVENTOR_API SoSFEnum : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFEnum, int, int);
 

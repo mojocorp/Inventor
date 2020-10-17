@@ -12,7 +12,7 @@
 #include <Inventor/elements/SoSubElement.h>
 
 SoEXTENDER
-class SoStereoElement : public SoElement {
+class INVENTOR_API SoStereoElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoStereoElement);
 

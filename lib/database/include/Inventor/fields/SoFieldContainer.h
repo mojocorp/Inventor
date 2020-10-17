@@ -86,7 +86,7 @@ class SoFieldList;
 /// engine's output corresponds to a specific type of field, an engine
 /// output is not a field.
 /// \sa SoSField, SoMField, SoNode, SoDB
-class SoFieldContainer : public SoBase {
+class INVENTOR_API SoFieldContainer : public SoBase {
 
   public:
     /// Returns type identifier for SoFieldContainer class

@@ -58,7 +58,7 @@
 #include <Inventor/elements/SoTextureUnitElement.h>
 
 SoEXTENDER
-class SoGLTextureUnitElement : public SoTextureUnitElement {
+class INVENTOR_API SoGLTextureUnitElement : public SoTextureUnitElement {
     SO_ELEMENT_HEADER(SoGLTextureUnitElement);
 
   public:

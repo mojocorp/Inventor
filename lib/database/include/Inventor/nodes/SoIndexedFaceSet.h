@@ -143,7 +143,7 @@ class SoShapeStyleElement;
 /// }
 /// \endcode
 /// \sa SoCoordinate3,SoDrawStyle,SoFaceDetail,SoFaceSet,SoVertexProperty
-class SoIndexedFaceSet : public SoIndexedShape {
+class INVENTOR_API SoIndexedFaceSet : public SoIndexedShape {
 
     SO_NODE_HEADER(SoIndexedFaceSet);
 

@@ -117,7 +117,7 @@ class SoCallbackAction;
 /// \endcode
 /// \sa
 /// SoBaseKit,SoNodeKit,SoNodeKitDetail,SoNodeKitPath,SoNodekitCatalog,SoSceneKit,SoSeparatorKit,SoShapeKit,SoWrapperKit
-class SoNodeKitListPart : public SoNode {
+class INVENTOR_API SoNodeKitListPart : public SoNode {
 
     SO_NODE_HEADER(SoNodeKitListPart);
 

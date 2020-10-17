@@ -78,7 +78,7 @@ class SoState;
 /// Each node in the picked path may have a corresponding instance of a detail
 /// subclass. These detail instances are stored in the <tt>SoPickedPoint</tt>.
 /// \sa SoRayPickAction, SoPickStyle, SoDetail, SoPath
-class SoPickedPoint {
+class INVENTOR_API SoPickedPoint {
 
   public:
     /// Copy constructor

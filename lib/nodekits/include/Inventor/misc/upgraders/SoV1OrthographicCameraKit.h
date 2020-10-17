@@ -79,7 +79,7 @@
 ////////////////////////////////////////////////////////////////////
 
 SoEXTENDER
-class SoV1OrthographicCameraKit : public SoV1CameraKit {
+class INVENTOR_API SoV1OrthographicCameraKit : public SoV1CameraKit {
 
     // Define typeId and name stuff
     SO_NODE_HEADER(SoV1OrthographicCameraKit);

@@ -76,7 +76,7 @@
 /// }
 /// \endcode
 /// \sa SoProfile, SoProfileCoordinate3
-class SoProfileCoordinate2 : public SoNode {
+class INVENTOR_API SoProfileCoordinate2 : public SoNode {
 
     SO_NODE_HEADER(SoProfileCoordinate2);
 

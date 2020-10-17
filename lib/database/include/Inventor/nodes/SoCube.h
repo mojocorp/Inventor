@@ -103,7 +103,7 @@
 /// }
 /// \endcode
 /// \sa SoCone,SoCubeDetail,SoCylinder,SoSphere
-class SoCube : public SoShape {
+class INVENTOR_API SoCube : public SoShape {
 
     SO_NODE_HEADER(SoCube);
 

@@ -160,7 +160,7 @@ class SoFieldSensor;
 /// \sa
 /// SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,SoTransformerDragger,
 /// \sa SoTranslate1Dragger,SoTranslate2Dragger
-class SoRotateCylindricalDragger : public SoDragger {
+class INVENTOR_API SoRotateCylindricalDragger : public SoDragger {
     SO_KIT_HEADER(SoRotateCylindricalDragger);
 
     SO_KIT_CATALOG_ENTRY_HEADER(rotatorSwitch);

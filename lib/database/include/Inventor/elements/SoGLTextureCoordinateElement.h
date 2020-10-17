@@ -81,7 +81,7 @@
 typedef void SoTexCoordTexgenCB(void *userdata);
 
 SoEXTENDER
-class SoGLTextureCoordinateElement : public SoTextureCoordinateElement {
+class INVENTOR_API SoGLTextureCoordinateElement : public SoTextureCoordinateElement {
 
     SO_ELEMENT_HEADER(SoGLTextureCoordinateElement);
 

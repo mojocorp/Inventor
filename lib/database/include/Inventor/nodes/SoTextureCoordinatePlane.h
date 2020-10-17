@@ -95,7 +95,7 @@
 /// }
 /// \endcode
 /// \sa
-class SoTextureCoordinatePlane : public SoTextureCoordinateFunction {
+class INVENTOR_API SoTextureCoordinatePlane : public SoTextureCoordinateFunction {
 
     SO_NODE_HEADER(SoTextureCoordinatePlane);
 

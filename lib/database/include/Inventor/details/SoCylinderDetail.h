@@ -63,7 +63,7 @@
 /// It contains the part of the cylinder that was hit (sides, top, or
 /// bottom).
 /// \sa SoCylinder, SoDetail, SoPickedPoint, SoPrimitiveVertex
-class SoCylinderDetail : public SoDetail {
+class INVENTOR_API SoCylinderDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoCylinderDetail);
 

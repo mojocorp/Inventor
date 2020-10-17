@@ -66,7 +66,7 @@
 /// floating point value representing the length of time in seconds.
 /// Absolute times are measured relative to 00:00:00 GMT, January 1, 1970.
 /// \sa SbTime, SoField, SoSField, SoMFTime
-class SoSFTime : public SoSField {
+class INVENTOR_API SoSFTime : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFTime, SbTime, const SbTime &);
 

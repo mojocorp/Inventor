@@ -128,7 +128,7 @@ class SoCoordinateElement;
 /// \endcode
 /// \sa
 /// SoCoordinate3,SoDrawStyle,SoFaceDetail,SoIndexedFaceSet,SoTriangleStripSet,SoVertexProperty
-class SoIndexedTriangleStripSet : public SoIndexedShape {
+class INVENTOR_API SoIndexedTriangleStripSet : public SoIndexedShape {
 
     SO_NODE_HEADER(SoIndexedTriangleStripSet);
 
