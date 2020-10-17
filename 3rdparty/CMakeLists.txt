@@ -5,7 +5,8 @@ set(BUILD_SHARED_LIBS OFF CACHE BOOL "disable shared libs" FORCE)
 set(SKIP_INSTALL_ALL ON CACHE BOOL "disable install" FORCE)
 add_subdirectory(freetype2)
 
-set(INSTALL_GTEST OFF)
+set(INSTALL_GTEST OFF CACHE BOOL "disable install" FORCE)
+set(gtest_force_shared_crt ON CACHE BOOL "Use shared (DLL) run-time lib even when Google Test is built as static lib." FORCE)
 add_subdirectory(googletest)
 
 add_subdirectory(perceptualdiff)

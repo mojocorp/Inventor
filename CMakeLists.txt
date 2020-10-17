@@ -8,6 +8,7 @@ option(BUILD_APPS "Build applications" ON)
 if(NOT WIN32)
     option(BUILD_EXAMPLES "Build examples" ON)
 endif()
+option(BUILD_TESTS "Build the tests" ON)
 
 set(CMAKE_CXX_STANDARD 98)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -42,6 +43,10 @@ if (BUILD_DOC)
   add_subdirectory(doc)
 endif()
 add_subdirectory(apps)
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
 
 # Package builder
 set(CPACK_PACKAGE_NAME "Inventor")

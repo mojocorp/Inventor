@@ -1,0 +1,102 @@
+#Inventor V2.1 utf8
+
+Separator {
+    Font {
+	name	"Arial Unicode"
+	size	50
+    }
+    Separator {
+	Material {
+	    diffuseColor	0.60000002 0.60000002 0.60000002
+	}
+	Transform {
+	    translation	-1 1 1
+	}
+	Text2 {
+	    string	"ザ"
+	    justification	RIGHT
+	}
+    }
+    Separator {
+	Material {
+	    diffuseColor	0.2 0.2 1
+	}
+	Transform {
+	    translation	-1 1 -1
+	}
+	Text2 {
+	    string	"迅速な"
+	    justification	RIGHT
+	}
+    }
+    Separator {
+	Material {
+	    diffuseColor	0.2 1 0.2
+	}
+	Transform {
+	    translation	-1 -1 -1
+	}
+	Text2 {
+	    string	"茶色"
+	    justification	RIGHT
+	}
+    }
+    Separator {
+	Material {
+	    diffuseColor	0.2 1 1
+	}
+	Transform {
+	    translation	-1 -1 1
+	}
+	Text2 {
+	    string	"キツネ"
+	    justification	RIGHT
+	}
+    }
+    Separator {
+	Material {
+	    diffuseColor	1 0.2 0.2
+	}
+	Transform {
+	    translation	1 1 1
+	}
+	Text2 {
+	    string	"飛び越え"
+	}
+    }
+    Separator {
+	Material {
+	    diffuseColor	1 0.2 1
+	}
+	Transform {
+	    translation	1 1 -1
+	}
+	Text2 {
+	    string	"ザ"
+	}
+    }
+    Separator {
+	Material {
+	    diffuseColor	1 1 0.2
+	}
+	Transform {
+	    translation	1 -1 -1
+	}
+	Text2 {
+	    string	"怠惰な"
+	}
+    }
+    Separator {
+	Material {
+	    diffuseColor	1 1 1
+	}
+	Transform {
+	    translation	1 -1 1
+	}
+	Text2 {
+	    string	"犬"
+	}
+    }
+    Cube {
+    }
+}

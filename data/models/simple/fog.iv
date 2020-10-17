@@ -1,0 +1,47 @@
+#Inventor V2.1 ascii
+
+Separator {
+    Texture2 {
+        filename "../../textures/crate.jpg"
+    }
+    Separator {
+        Environment {
+            fogType HAZE
+            fogColor 0.8 0.8 0.9
+        }
+        Translation {
+            translation -1.5 1.5 0
+        }
+        Cube {
+        }
+    }
+    Separator {
+        Environment {
+            fogType FOG
+            fogColor 0.8 0.8 0.9
+        }
+        Translation {
+            translation 1.5 1.5 0
+        }
+        Cube {
+        }
+    }
+    Separator {
+        Environment {
+            fogType SMOKE
+            fogColor 0.8 0.8 0.9
+        }
+        Translation {
+            translation -1.5 -1.5 0
+        }
+        Cube {
+        }
+    }
+    Separator {
+        Translation {
+            translation 1.5 -1.5 0
+        }
+        Cube {
+        }
+    }
+}

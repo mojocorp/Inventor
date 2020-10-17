@@ -31,7 +31,8 @@ SoFontCache::finish() {
 }
 
 SoFontCache::SoFontCache(SoState *state) : SoCache(state), face(NULL) {
-    const SbName &fontName = SoFontNameElement::get(state);
+    const SbString fontName =
+        SoFont::getFontFileName(SoFontNameElement::get(state));
 
     // Grab all the stuff we'll need to determine our validity from
     // the state.
@@ -49,8 +50,8 @@ SoFontCache::SoFontCache(SoState *state) : SoCache(state), face(NULL) {
         }
     } else {
         SbFile file;
-        if (file.open(SoFont::getFontFileName(fontName), "rb")) {
-            face_buffer.resize(SbFile::size(SoFont::getFontFileName(fontName)));
+        if (file.open(fontName, "rb")) {
+            face_buffer.resize(SbFile::size(fontName));
             file.read(&face_buffer[0], 1, face_buffer.size());
 
             if (FT_New_Memory_Face(library, &face_buffer[0],
