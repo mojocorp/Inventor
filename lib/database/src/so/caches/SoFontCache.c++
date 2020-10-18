@@ -31,35 +31,27 @@ SoFontCache::finish() {
 }
 
 SoFontCache::SoFontCache(SoState *state) : SoCache(state), face(NULL) {
-    const SbName &fontName = SoFontNameElement::get(state);
+    const SbName fontName = SoFontNameElement::get(state);
 
     // Grab all the stuff we'll need to determine our validity from
     // the state.
     addElement(state->getConstElement(SoFontNameElement::getClassStackIndex()));
     addElement(state->getConstElement(SoFontSizeElement::getClassStackIndex()));
 
-    if (fontName == SoFontNameElement::getDefault() ||
-        fontName == "Utopia-Regular") {
-        if (FT_New_Memory_Face(library, binary_utopia_regular,
-                               BINARY_UTOPIA_REGULAR_SIZE, 0, &face)) {
-#ifdef DEBUG
-            SoDebugError::post("SoBitmapFontCache::getFont",
-                               "Couldn't load embeded font Utopia-Regular!");
-#endif
-        }
-    } else {
-        SbFile file;
-        if (file.open(SoFont::getFontFileName(fontName), "rb")) {
-            face_buffer.resize(SbFile::size(SoFont::getFontFileName(fontName)));
+    if (fontName != SoFontNameElement::getDefault()) {
+        const SbString fontFilename = SoFont::getFontFileName(fontName);
+        SbFile         file;
+        if (file.open(fontFilename, "rb")) {
+            face_buffer.resize(SbFile::size(fontFilename));
             file.read(&face_buffer[0], 1, face_buffer.size());
 
             if (FT_New_Memory_Face(library, &face_buffer[0],
                                    (FT_Long)face_buffer.size(), 0, &face)) {
 #ifdef DEBUG
                 SoDebugError::post(
-                    "SoBitmapFontCache::getFont",
+                    "SoFontCache::SoFontCache",
                     "Couldn't find font %s, replacing with Utopia-Regular",
-                    fontName.getString());
+                    fontFilename.getString());
 #endif
             }
         }
@@ -68,8 +60,8 @@ SoFontCache::SoFontCache(SoState *state) : SoCache(state), face(NULL) {
     if (!face && FT_New_Memory_Face(library, binary_utopia_regular,
                                     BINARY_UTOPIA_REGULAR_SIZE, 0, &face)) {
 #ifdef DEBUG
-        SoDebugError::post("SoText2::getFont",
-                           "Couldn't find font Utopia-Regular!");
+        SoDebugError::post("SoFontCache::SoFontCache",
+                           "Couldn't load embeded font Utopia-Regular!");
 #endif
     }
 }
