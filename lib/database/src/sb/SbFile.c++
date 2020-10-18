@@ -1,18 +1,6 @@
 #include <Inventor/SbFile.h>
 
 #include <algorithm>
-
-#if defined(SB_OS_WIN)
-#include <io.h>
-#include <sys/types.h>
-#define SB_FTELL ::_ftelli64
-#define SB_FSEEK ::_fseeki64
-#else
-#include <unistd.h>
-#define SB_FTELL ftello
-#define SB_FSEEK fseeko
-#endif
-
 #include <sys/stat.h>
 
 SbFile::SbFile() : mOwner(false), mFilePointer(NULL) {}
@@ -70,7 +58,7 @@ SbFile::pos() const {
     if (!isOpen())
         return 0;
 
-    return SB_FTELL(mFilePointer);
+    return ftell(mFilePointer);
 }
 
 bool
@@ -78,7 +66,7 @@ SbFile::seek(int64_t offset) {
     if (!isOpen())
         return false;
 
-    return SB_FSEEK(mFilePointer, offset, SEEK_SET) == 0;
+    return fseek(mFilePointer, offset, SEEK_SET) == 0;
 }
 
 bool
@@ -91,7 +79,7 @@ SbFile::eof() const {
 
 bool
 SbFile::getChar(char *c) {
-    int i = getc(mFilePointer);
+    const int i = getc(mFilePointer);
 
     if (c)
         *c = (char)i;
@@ -125,8 +113,8 @@ SbFile::flush() {
 int64_t
 SbFile::size(const SbString &fileName) {
 #if defined(SB_OS_WIN)
-    struct _stati64 st;
-    if (_wstati64(fileName.toStdWString().data(), &st) == 0) {
+    struct _stat st;
+    if (_wstat(fileName.toStdWString().data(), &st) == 0) {
         return st.st_size;
     }
 #else
@@ -141,23 +129,26 @@ SbFile::size(const SbString &fileName) {
 
 bool
 SbFile::exists(const SbString &fileName) {
-#ifdef SB_OS_WIN
-    return (::_waccess(fileName.toStdWString().data(), 00) == 0) ? true : false;
+#if defined(SB_OS_WIN)
+    struct _stat st;
+    return (_wstat(fileName.toStdWString().data(), &st) == 0);
 #else
-    return (access(fileName.getString(), F_OK) == 0) ? true : false;
+    struct stat buffer;
+    return (stat(fileName.getString(), &buffer) == 0);
 #endif
 }
 
 SbString
 SbFile::baseName(const SbString &filename) {
-    int index = std::max(filename.rfind("/"), filename.rfind("\\"));
+    const int index = std::max(filename.rfind("/"), filename.rfind("\\"));
 
     return filename.getSubString(index + 1);
 }
 
 SbString
 SbFile::extension(const SbString &filename) {
-    int firstDot = filename.find(".", (int)baseName(filename).getLength());
+    const int firstDot =
+        filename.find(".", (int)baseName(filename).getLength());
     if (firstDot == -1)
         return "";
 
@@ -166,7 +157,7 @@ SbFile::extension(const SbString &filename) {
 
 SbString
 SbFile::dirName(const SbString &filename) {
-    int index = std::max(filename.rfind("/"), filename.rfind("\\"));
+    const int index = std::max(filename.rfind("/"), filename.rfind("\\"));
 
     return filename.getSubString(0, index);
 }
