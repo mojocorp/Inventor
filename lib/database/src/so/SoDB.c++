@@ -305,7 +305,7 @@ SoDB::finish()
         SoFieldContainer::finishClass();
         SoBase::finishClass();
 
-        // CRASH SoFontCache::finish();
+        SoFontCache::finish();
         SoInput::finish();
         SoType::finish();
         SbName::finish();

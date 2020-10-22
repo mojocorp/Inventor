@@ -33,7 +33,18 @@ jobs:
     - name: Build
       working-directory: build
       shell: bash
-      run: cmake --build . --config Release --target install
+      run: cmake --build . --config Release
+    - name: Test
+      working-directory: build
+      shell: bash
+      env: 
+        OIVHOME: ${{ github.workspace }}
+      run: |
+        if [[ "${{ matrix.os }}" = "windows-latest" ]]
+        then
+          cp lib/Release/Inventor.dll tests/Release/
+        fi
+        ctest -V -C Release -E ".*GLCTX.*"
     - name: Pack
       working-directory: build
       shell: bash
